@@ -1,0 +1,64 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<div class="card p-4">
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <img src="{{ team.flag.url }}"
+                 class="img-fluid rounded">
+
+        </div>
+
+        <div class="col-md-8">
+
+            <h1>{{ team.name }}</h1>
+
+            <p><strong>Group:</strong> {{ team.group }}</p>
+
+            <p><strong>Coach:</strong> {{ team.coach }}</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<h2 class="mt-4">👥 Squad</h2>
+
+<div class="row">
+
+{% for player in players %}
+
+<div class="col-md-3 mb-4">
+
+    <div class="card text-center">
+
+        {% if player.photo %}
+        <img src="{{ player.photo.url }}"
+             class="card-img-top"
+             style="height:250px; object-fit:cover;">
+        {% endif %}
+
+        <div class="card-body">
+
+            <h5>{{ player.name }}</h5>
+
+            <p>#{{ player.jersey_number }}</p>
+
+            <p>{{ player.position }}</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

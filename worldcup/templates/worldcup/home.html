@@ -1,0 +1,110 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+<div class="hero">
+
+    <h1>🏆 FIFA World Cup 2026</h1>
+
+    <p>
+        Follow Teams, Players, Matches, Standings & Latest News
+    </p>
+
+    
+
+</div>
+
+<!-- ================= HIGHLIGHTS SECTION ================= -->
+<h2 class="section-title">🎥 Highlights</h2>
+
+<div class="row">
+
+    {% for h in highlights %}
+
+    <div class="col-md-4 mb-3">
+
+    <a href="https://www.youtube.com/watch?v={{ h.youtube_id }}"
+       target="_blank"
+       class="text-decoration-none">
+
+        <div class="card p-2">
+
+            <img src="https://img.youtube.com/vi/{{ h.youtube_id }}/0.jpg"
+                 class="card-img-top"
+                 style="height:200px; object-fit:cover;">
+
+            <div class="card-body text-center">
+
+                <h5>{{ h.title }}</h5>
+
+                <span class="btn btn-sm btn-warning">
+                    ▶ Watch
+                </span>
+
+            </div>
+
+        </div>
+
+    </a>
+
+</div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            No highlights available.
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<!-- ================= NEWS SECTION ================= -->
+<h2 class="section-title">Latest News</h2>
+
+<div class="row">
+
+    {% for item in news %}
+
+    <div class="col-md-4 mb-4">
+
+    <a href="{% url 'news_detail' item.id %}" class="text-decoration-none text-white">
+    
+
+
+    <div class="card h-100">
+
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top news-img">
+        {% endif %}
+
+        <div class="card-body">
+
+            <h5 class="card-title">{{ item.title }}</h5>
+
+            <p class="card-text">
+                {{ item.content|truncatewords:20 }}
+            </p>
+
+        </div>
+
+    </div>
+
+</a>
+ 
+
+</div>
+
+    {% empty %}
+
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            No news available.
+        </div>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<h2 class="section-title">Players</h2>
+
+<div class="row">
+
+{% for player in players %}
+
+<div class="col-md-3 mb-4">
+
+    <div class="card text-center p-2">
+
+        <img src="{{ player.photo.url }}"
+             class="card-img-top"
+             style="height:250px; object-fit:cover;">
+
+        <div class="card-body">
+
+            <h5>{{ player.name }}</h5>
+
+            <p>{{ player.position }}</p>
+
+            <h6>#{% if player.jersey_number %}{{ player.jersey_number }}{% endif %}</h6>
+
+            <p>⚽ Goals: {{ player.goals }}</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<h2 class="section-title">World Cup Groups</h2>
+
+{% for group, teams in groups.items %}
+
+<div class="card p-3 mb-3">
+
+    <h4>Group {{ group }}</h4>
+
+    <ul>
+        {% for team in teams %}
+            <li>{{ team.name }}</li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+{% endfor %}
+
+{% endblock %}

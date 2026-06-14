@@ -1,0 +1,27 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<div class="card shadow-lg">
+
+    {% if news.image %}
+
+    <img src="{{ news.image.url }}"
+         class="card-img-top news-detail-img"
+         alt="{{ news.title }}">
+
+    {% endif %}
+
+    <div class="card-body">
+
+        <h2 class="card-title">{{ news.title }}</h2>
+
+        <p class="card-text mt-3">
+            {{ news.content }}
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

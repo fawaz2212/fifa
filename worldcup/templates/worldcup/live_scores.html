@@ -1,0 +1,129 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<h2 class="section-title mb-4">
+    🔴 Live FIFA World Cup Scores
+</h2>
+
+<div id="live-scores">
+
+    <div class="text-center">
+        Loading matches...
+    </div>
+
+</div>
+
+<script>
+
+function loadScores() {
+
+    fetch('/api/live-scores/')
+    .then(response => response.json())
+    .then(matches => {
+
+        let html = '';
+
+        matches.forEach(match => {
+
+            html += `
+
+            <div class="match-card">
+
+                <div class="group-title">
+                    ${match.group || ''}
+                </div>
+
+                <div class="teams-row">
+
+                    <div class="team-side">
+
+                        <img
+                            src="${match.homeTeam.crest}"
+                            class="team-logo"
+                            alt="${match.homeTeam.name}"
+                        >
+
+                        <span>
+                            ${match.homeTeam.name}
+                        </span>
+
+                    </div>
+
+                    <div class="score-box">
+
+                        ${match.score.fullTime.home ?? "-"}
+
+                        -
+
+                        ${match.score.fullTime.away ?? "-"}
+
+                        <div class="match-status">
+
+                            ${match.status}
+
+                        </div>
+
+                    </div>
+
+                    <div class="team-side">
+
+                        <img
+                            src="${match.awayTeam.crest}"
+                            class="team-logo"
+                            alt="${match.awayTeam.name}"
+                        >
+
+                        <span>
+                            ${match.awayTeam.name}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="match-time">
+
+                    ${new Date(match.utcDate).toLocaleString()}
+
+                </div>
+
+            </div>
+
+            `;
+
+        });
+
+        if (matches.length === 0) {
+
+            html = `
+                <div class="alert alert-info text-center">
+                    No matches available.
+                </div>
+            `;
+        }
+
+        document.getElementById('live-scores').innerHTML = html;
+
+    })
+    .catch(error => {
+
+        document.getElementById('live-scores').innerHTML = `
+            <div class="alert alert-danger">
+                Failed to load scores.
+            </div>
+        `;
+
+        console.log(error);
+
+    });
+
+}
+
+loadScores();
+
+setInterval(loadScores, 30000);
+
+</script>
+
+{% endblock %}

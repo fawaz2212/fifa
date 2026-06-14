@@ -1,0 +1,21 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+
+    path('teams/', views.teams, name='teams'),
+    path('players/', views.players, name='players'),
+
+    path('groups/', views.groups, name='groups'),
+    path('live-scores/', views.live_scores, name='live_scores'),
+    path('live-scores/', views.live_scores, name='live_scores'),
+    path('api/live-scores/', views.live_scores_api, name='live_scores_api'),
+
+
+    path('live-standings/', views.live_standings, name='live_standings'),
+
+    path('team/<int:id>/', views.team_detail, name='team_detail'),
+    path('news/<int:id>/', views.news_detail, name='news_detail'),
+  
+]

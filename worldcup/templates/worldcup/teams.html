@@ -1,0 +1,50 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<h1 class="section-title text-center mb-4">
+    🏆 FIFA World Cup Teams
+</h1>
+
+<div class="row">
+
+{% for team in teams %}
+
+<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+    <div class="card team-card h-100">
+
+        {% if team.flag %}
+        <img src="{{ team.flag.url }}"
+             class="card-img-top team-flag"
+             alt="{{ team.name }}">
+        {% endif %}
+
+        <div class="card-body text-center">
+
+            <h5 class="card-title">{{ team.name }}</h5>
+
+            <p>
+                <strong>Group:</strong> {{ team.group }}
+            </p>
+
+            <p>
+                <strong>Coach:</strong> {{ team.coach }}
+            </p>
+
+            <a href="{% url 'team_detail' team.id %}"
+               class="btn btn-warning">
+                View Squad
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}
