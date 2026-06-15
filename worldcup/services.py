@@ -16,13 +16,21 @@ def get_standings():
 
     return None
 
+from datetime import date, timedelta
 import requests
 
 API_TOKEN = "ac3f9df41b9e4d37a2fe2f1320bd5e0b"
 
 def get_live_matches():
 
-    url = "https://api.football-data.org/v4/matches"
+    yesterday = date.today() - timedelta(days=1)
+    tomorrow = date.today() + timedelta(days=1)
+
+    url = (
+        f"https://api.football-data.org/v4/matches"
+        f"?dateFrom={yesterday}"
+        f"&dateTo={tomorrow}"
+    )
 
     headers = {
         "X-Auth-Token": API_TOKEN
@@ -31,6 +39,7 @@ def get_live_matches():
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        return response.json()
+        data = response.json()
+        return data.get("matches", [])
 
-    return {"matches": []}
+    return []

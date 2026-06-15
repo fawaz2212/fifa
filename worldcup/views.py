@@ -100,25 +100,15 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .services import get_live_matches
 
-
 def live_scores(request):
-
-    data = get_live_matches()
-
-    matches = data.get("matches", [])
 
     return render(
         request,
-        "worldcup/live_scores.html",
-        {"matches": matches}
+        "worldcup/live_scores.html"
     )
-
 
 def live_scores_api(request):
 
-    data = get_live_matches()
+    matches = get_live_matches()
 
-    return JsonResponse(
-        data.get("matches", []),
-        safe=False
-    )
+    return JsonResponse(matches, safe=False)

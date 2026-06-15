@@ -2,15 +2,17 @@
 
 {% block content %}
 
-<h2 class="section-title mb-4">
-    🔴 Live FIFA World Cup Scores
+<h2 class="section-title mb-4 text-center">
+    🔴 FIFA World Cup Live Scores
 </h2>
 
 <div id="live-scores">
 
-    <div class="text-center">
-        Loading matches...
-    </div>
+```
+<div class="text-center">
+    Loading matches...
+</div>
+```
 
 </div>
 
@@ -23,6 +25,18 @@ function loadScores() {
     .then(matches => {
 
         let html = '';
+
+        if (!matches || matches.length === 0) {
+
+            html = `
+                <div class="alert alert-info text-center">
+                    No matches available.
+                </div>
+            `;
+
+            document.getElementById('live-scores').innerHTML = html;
+            return;
+        }
 
         matches.forEach(match => {
 
@@ -39,7 +53,7 @@ function loadScores() {
                     <div class="team-side">
 
                         <img
-                            src="${match.homeTeam.crest}"
+                            src="${match.homeTeam.crest || ''}"
                             class="team-logo"
                             alt="${match.homeTeam.name}"
                         >
@@ -52,16 +66,14 @@ function loadScores() {
 
                     <div class="score-box">
 
-                        ${match.score.fullTime.home ?? "-"}
+                        ${match.score?.fullTime?.home ?? "-"}
 
                         -
 
-                        ${match.score.fullTime.away ?? "-"}
+                        ${match.score?.fullTime?.away ?? "-"}
 
                         <div class="match-status">
-
                             ${match.status}
-
                         </div>
 
                     </div>
@@ -69,7 +81,7 @@ function loadScores() {
                     <div class="team-side">
 
                         <img
-                            src="${match.awayTeam.crest}"
+                            src="${match.awayTeam.crest || ''}"
                             class="team-logo"
                             alt="${match.awayTeam.name}"
                         >
@@ -83,39 +95,26 @@ function loadScores() {
                 </div>
 
                 <div class="match-time">
-
-                    ${new Date(match.utcDate).toLocaleString()}
-
+                    📅 ${new Date(match.utcDate).toLocaleString()}
                 </div>
 
             </div>
 
             `;
-
         });
-
-        if (matches.length === 0) {
-
-            html = `
-                <div class="alert alert-info text-center">
-                    No matches available.
-                </div>
-            `;
-        }
 
         document.getElementById('live-scores').innerHTML = html;
 
     })
     .catch(error => {
 
+        console.error(error);
+
         document.getElementById('live-scores').innerHTML = `
-            <div class="alert alert-danger">
+            <div class="alert alert-danger text-center">
                 Failed to load scores.
             </div>
         `;
-
-        console.log(error);
-
     });
 
 }
