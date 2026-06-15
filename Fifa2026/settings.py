@@ -7,7 +7,7 @@ SECRET_KEY = 'django-insecure-ss8hsb81j34p4%@12bnx@tm1en8gfn-xn%xc2&fg_!xuyypf$m
 # Changed back to True for local development so your static files/CSS load correctly
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']   # better: add your Render domain later
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
