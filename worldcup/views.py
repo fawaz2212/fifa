@@ -8,7 +8,6 @@ from .models import Highlight
 
 def home(request):
     news = News.objects.all().order_by('-id')
-
     highlights = Highlight.objects.all().order_by('-id')
 
     return render(
