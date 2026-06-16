@@ -6,13 +6,44 @@
     🔴 FIFA World Cup Live Scores
 </h2>
 
-<div id="live-scores">
+<div class="text-center mb-4">
+
+```
+<button class="btn btn-danger" onclick="showTab('today')">
+    Today
+</button>
+
+<button class="btn btn-warning" onclick="showTab('recent')">
+    Recent Matches
+</button>
+
+<button class="btn btn-primary" onclick="showTab('upcoming')">
+    Upcoming
+</button>
+```
+
+</div>
+
+<div id="today-tab">
     <div class="text-center">
         Loading matches...
     </div>
 </div>
 
+<div id="recent-tab" style="display:none;"></div>
+
+<div id="upcoming-tab" style="display:none;"></div>
+
 <script>
+
+function showTab(tab) {
+
+    document.getElementById('today-tab').style.display = 'none';
+    document.getElementById('recent-tab').style.display = 'none';
+    document.getElementById('upcoming-tab').style.display = 'none';
+
+    document.getElementById(tab + '-tab').style.display = 'block';
+}
 
 function loadScores() {
 
@@ -21,24 +52,18 @@ function loadScores() {
     .then(matches => {
 
         let todayHtml = '';
-        let finishedHtml = '';
         let upcomingHtml = '';
+        let recentGroups = {};
 
-        if (!matches || matches.length === 0) {
-
-            document.getElementById('live-scores').innerHTML = `
-                <div class="alert alert-info text-center">
-                    No matches available.
-                </div>
-            `;
-            return;
-        }
-
-        const today = new Date().toISOString().split('T')[0];
+        const today = new Date();
+        today.setHours(0,0,0,0);
 
         matches.forEach(match => {
 
-            const matchDate = match.utcDate.split('T')[0];
+            const matchDate = new Date(match.utcDate);
+
+            const matchOnlyDate = new Date(matchDate);
+            matchOnlyDate.setHours(0,0,0,0);
 
             let card = `
 
@@ -67,9 +92,7 @@ function loadScores() {
                     <div class="score-box">
 
                         ${match.score?.fullTime?.home ?? "-"}
-
                         -
-
                         ${match.score?.fullTime?.away ?? "-"}
 
                         <div class="match-status">
@@ -95,21 +118,27 @@ function loadScores() {
                 </div>
 
                 <div class="match-time">
-                    📅 ${new Date(match.utcDate).toLocaleString()}
+                    📅 ${matchDate.toLocaleString()}
                 </div>
 
             </div>
 
             `;
 
-            if (matchDate === today) {
+            if (matchOnlyDate.getTime() === today.getTime()) {
 
                 todayHtml += card;
 
             }
             else if (match.status === "FINISHED") {
 
-                finishedHtml += card;
+                const dateKey = matchDate.toISOString().split('T')[0];
+
+                if (!recentGroups[dateKey]) {
+                    recentGroups[dateKey] = '';
+                }
+
+                recentGroups[dateKey] += card;
 
             }
             else {
@@ -120,34 +149,43 @@ function loadScores() {
 
         });
 
-        document.getElementById('live-scores').innerHTML = `
+        let recentHtml = '';
 
-            <h3 class="text-danger mb-3">
-                🔴 Today's Matches
-            </h3>
+        Object.keys(recentGroups)
+            .sort((a, b) => b.localeCompare(a))
+            .forEach(date => {
 
-            ${todayHtml || '<p>No matches today.</p>'}
+                recentHtml += `
 
-            <h3 class="text-success mt-4 mb-3">
-                ⚽ Recent Results
-            </h3>
+                <div class="mt-4">
 
-            ${finishedHtml || '<p>No recent results.</p>'}
+                    <h4 class="text-warning border-bottom pb-2">
+                        📅 ${new Date(date).toLocaleDateString()}
+                    </h4>
 
-            <h3 class="text-primary mt-4 mb-3">
-                📅 Upcoming Fixtures
-            </h3>
+                    ${recentGroups[date]}
 
-            ${upcomingHtml || '<p>No upcoming fixtures.</p>'}
+                </div>
 
-        `;
+                `;
+
+            });
+
+        document.getElementById('today-tab').innerHTML =
+            todayHtml || '<p class="text-center">No matches today.</p>';
+
+        document.getElementById('recent-tab').innerHTML =
+            recentHtml || '<p class="text-center">No recent matches.</p>';
+
+        document.getElementById('upcoming-tab').innerHTML =
+            upcomingHtml || '<p class="text-center">No upcoming fixtures.</p>';
 
     })
     .catch(error => {
 
         console.error(error);
 
-        document.getElementById('live-scores').innerHTML = `
+        document.getElementById('today-tab').innerHTML = `
             <div class="alert alert-danger text-center">
                 Failed to load scores.
             </div>
