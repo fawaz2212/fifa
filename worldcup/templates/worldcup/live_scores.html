@@ -6,8 +6,8 @@
     🔴 FIFA World Cup Live Scores
 </h2>
 
-<div class="text-center mb-4">
 
+<div class="text-center mb-4">
 
 <button class="btn btn-danger" onclick="showTab('today')">
     Today
@@ -21,184 +21,330 @@
     Upcoming
 </button>
 
-
 </div>
+
 
 <div id="today-tab">
-    <div class="text-center">
-        Loading matches...
-    </div>
+    Loading matches...
 </div>
+
 
 <div id="recent-tab" style="display:none;"></div>
 
+
 <div id="upcoming-tab" style="display:none;"></div>
+
+
+
 
 <script>
 
-function showTab(tab) {
 
-    document.getElementById('today-tab').style.display = 'none';
-    document.getElementById('recent-tab').style.display = 'none';
-    document.getElementById('upcoming-tab').style.display = 'none';
+function showTab(tab){
 
-    document.getElementById(tab + '-tab').style.display = 'block';
-}
+    document.getElementById('today-tab').style.display='none';
+    document.getElementById('recent-tab').style.display='none';
+    document.getElementById('upcoming-tab').style.display='none';
 
-function loadScores() {
-
-    fetch('/api/live-scores/')
-    .then(response => response.json())
-    .then(matches => {
-
-        let todayHtml = '';
-        let upcomingHtml = '';
-        let recentGroups = {};
-
-        const today = new Date();
-        today.setHours(0,0,0,0);
-
-        matches.forEach(match => {
-
-            const matchDate = new Date(match.utcDate);
-
-            const matchOnlyDate = new Date(matchDate);
-            matchOnlyDate.setHours(0,0,0,0);
-
-            let card = `
-
-            <div class="match-card">
-
-                <div class="group-title">
-                    ${match.group || ''}
-                </div>
-
-                <div class="teams-row">
-
-                    <div class="team-side">
-
-                        <img
-                            src="${match.homeTeam?.crest || ''}"
-                            class="team-logo"
-                            alt="${match.homeTeam?.name || ''}"
-                        >
-
-                        <span>
-                            ${match.homeTeam?.name || ''}
-                        </span>
-
-                    </div>
-
-                    <div class="score-box">
-
-                        ${match.score?.fullTime?.home ?? "-"}
-                        -
-                        ${match.score?.fullTime?.away ?? "-"}
-
-                        <div class="match-status">
-                            ${match.status}
-                        </div>
-
-                    </div>
-
-                    <div class="team-side">
-
-                        <img
-                            src="${match.awayTeam?.crest || ''}"
-                            class="team-logo"
-                            alt="${match.awayTeam?.name || ''}"
-                        >
-
-                        <span>
-                            ${match.awayTeam?.name || ''}
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <div class="match-time">
-                    📅 ${matchDate.toLocaleString()}
-                </div>
-
-            </div>
-
-            `;
-
-            if (matchOnlyDate.getTime() === today.getTime()) {
-
-                todayHtml += card;
-
-            }
-            else if (match.status === "FINISHED") {
-
-                const dateKey = matchDate.toISOString().split('T')[0];
-
-                if (!recentGroups[dateKey]) {
-                    recentGroups[dateKey] = '';
-                }
-
-                recentGroups[dateKey] += card;
-
-            }
-            else {
-
-                upcomingHtml += card;
-
-            }
-
-        });
-
-        let recentHtml = '';
-
-        Object.keys(recentGroups)
-            .sort((a, b) => b.localeCompare(a))
-            .forEach(date => {
-
-                recentHtml += `
-
-                <div class="mt-4">
-
-                    <h4 class="text-warning border-bottom pb-2">
-                        📅 ${new Date(date).toLocaleDateString()}
-                    </h4>
-
-                    ${recentGroups[date]}
-
-                </div>
-
-                `;
-
-            });
-
-        document.getElementById('today-tab').innerHTML =
-            todayHtml || '<p class="text-center">No matches today.</p>';
-
-        document.getElementById('recent-tab').innerHTML =
-            recentHtml || '<p class="text-center">No recent matches.</p>';
-
-        document.getElementById('upcoming-tab').innerHTML =
-            upcomingHtml || '<p class="text-center">No upcoming fixtures.</p>';
-
-    })
-    .catch(error => {
-
-        console.error(error);
-
-        document.getElementById('today-tab').innerHTML = `
-            <div class="alert alert-danger text-center">
-                Failed to load scores.
-            </div>
-        `;
-
-    });
+    document.getElementById(tab+'-tab').style.display='block';
 
 }
+
+
+
+
+function loadScores(){
+
+
+fetch('/api/live-scores/')
+
+
+.then(res=>res.json())
+
+
+.then(matches=>{
+
+
+
+let todayMatches=[];
+
+let recentMatches=[];
+
+let upcomingMatches=[];
+
+
+
+let today=new Date();
+
+today.setHours(0,0,0,0);
+
+
+
+
+
+matches.forEach(match=>{
+
+
+let matchDate=new Date(match.utcDate);
+
+
+let onlyDate=new Date(matchDate);
+
+onlyDate.setHours(0,0,0,0);
+
+
+
+
+
+if(onlyDate.getTime()===today.getTime()){
+
+    todayMatches.push(match);
+
+}
+
+
+else if(match.status==="FINISHED"){
+
+
+    recentMatches.push(match);
+
+
+}
+
+
+else{
+
+
+    upcomingMatches.push(match);
+
+
+}
+
+
+
+});
+
+
+
+
+// SORT NEWEST FIRST
+
+
+todayMatches.sort((a,b)=>{
+
+return new Date(b.utcDate)-new Date(a.utcDate);
+
+});
+
+
+
+recentMatches.sort((a,b)=>{
+
+return new Date(b.utcDate)-new Date(a.utcDate);
+
+});
+
+
+
+
+
+// UPCOMING NEAREST FIRST
+
+
+upcomingMatches.sort((a,b)=>{
+
+return new Date(a.utcDate)-new Date(b.utcDate);
+
+});
+
+
+
+
+
+
+
+
+function createCard(match){
+
+
+
+let homeName =
+match.homeTeam?.name || "Home Team";
+
+
+let awayName =
+match.awayTeam?.name || "Away Team";
+
+
+
+let homeLogo =
+match.homeTeam?.crest ||
+"https://via.placeholder.com/50";
+
+
+
+let awayLogo =
+match.awayTeam?.crest ||
+"https://via.placeholder.com/50";
+
+
+
+
+return `
+
+
+<div class="match-card">
+
+
+<div class="teams-row">
+
+
+
+<div class="team-side">
+
+<img src="${homeLogo}" class="team-logo">
+
+<span>${homeName}</span>
+
+</div>
+
+
+
+
+<div class="score-box">
+
+
+${match.score?.fullTime?.home ?? "-"}
+
+-
+
+${match.score?.fullTime?.away ?? "-"}
+
+
+
+<div class="match-status">
+
+${match.status}
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="team-side">
+
+
+<img src="${awayLogo}" class="team-logo">
+
+
+<span>${awayName}</span>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+<div class="match-time">
+
+
+📅 ${new Date(match.utcDate).toLocaleString()}
+
+
+</div>
+
+
+
+</div>
+
+
+
+`;
+
+}
+
+
+
+
+let todayHtml="";
+
+let recentHtml="";
+
+let upcomingHtml="";
+
+
+
+
+todayMatches.forEach(m=>{
+
+todayHtml += createCard(m);
+
+});
+
+
+
+recentMatches.forEach(m=>{
+
+recentHtml += createCard(m);
+
+});
+
+
+
+upcomingMatches.forEach(m=>{
+
+upcomingHtml += createCard(m);
+
+});
+
+
+
+
+
+document.getElementById('today-tab').innerHTML =
+
+todayHtml || "No matches today";
+
+
+
+document.getElementById('recent-tab').innerHTML =
+
+recentHtml || "No recent matches";
+
+
+
+document.getElementById('upcoming-tab').innerHTML =
+
+upcomingHtml || "No upcoming matches";
+
+
+
+
+})
+
+.catch(err=>console.log(err));
+
+}
+
+
+
 
 loadScores();
 
-setInterval(loadScores, 30000);
+
+setInterval(loadScores,30000);
+
+
 
 </script>
+
 
 {% endblock %}
