@@ -7,13 +7,9 @@
 </h2>
 
 <div id="live-scores">
-
-```
-<div class="text-center">
-    Loading matches...
-</div>
-```
-
+    <div class="text-center">
+        Loading matches...
+    </div>
 </div>
 
 <script>
@@ -24,23 +20,27 @@ function loadScores() {
     .then(response => response.json())
     .then(matches => {
 
-        let html = '';
+        let todayHtml = '';
+        let finishedHtml = '';
+        let upcomingHtml = '';
 
         if (!matches || matches.length === 0) {
 
-            html = `
+            document.getElementById('live-scores').innerHTML = `
                 <div class="alert alert-info text-center">
                     No matches available.
                 </div>
             `;
-
-            document.getElementById('live-scores').innerHTML = html;
             return;
         }
 
+        const today = new Date().toISOString().split('T')[0];
+
         matches.forEach(match => {
 
-            html += `
+            const matchDate = match.utcDate.split('T')[0];
+
+            let card = `
 
             <div class="match-card">
 
@@ -53,13 +53,13 @@ function loadScores() {
                     <div class="team-side">
 
                         <img
-                            src="${match.homeTeam.crest || ''}"
+                            src="${match.homeTeam?.crest || ''}"
                             class="team-logo"
-                            alt="${match.homeTeam.name}"
+                            alt="${match.homeTeam?.name || ''}"
                         >
 
                         <span>
-                            ${match.homeTeam.name}
+                            ${match.homeTeam?.name || ''}
                         </span>
 
                     </div>
@@ -81,13 +81,13 @@ function loadScores() {
                     <div class="team-side">
 
                         <img
-                            src="${match.awayTeam.crest || ''}"
+                            src="${match.awayTeam?.crest || ''}"
                             class="team-logo"
-                            alt="${match.awayTeam.name}"
+                            alt="${match.awayTeam?.name || ''}"
                         >
 
                         <span>
-                            ${match.awayTeam.name}
+                            ${match.awayTeam?.name || ''}
                         </span>
 
                     </div>
@@ -101,9 +101,46 @@ function loadScores() {
             </div>
 
             `;
+
+            if (matchDate === today) {
+
+                todayHtml += card;
+
+            }
+            else if (match.status === "FINISHED") {
+
+                finishedHtml += card;
+
+            }
+            else {
+
+                upcomingHtml += card;
+
+            }
+
         });
 
-        document.getElementById('live-scores').innerHTML = html;
+        document.getElementById('live-scores').innerHTML = `
+
+            <h3 class="text-danger mb-3">
+                🔴 Today's Matches
+            </h3>
+
+            ${todayHtml || '<p>No matches today.</p>'}
+
+            <h3 class="text-success mt-4 mb-3">
+                ⚽ Recent Results
+            </h3>
+
+            ${finishedHtml || '<p>No recent results.</p>'}
+
+            <h3 class="text-primary mt-4 mb-3">
+                📅 Upcoming Fixtures
+            </h3>
+
+            ${upcomingHtml || '<p>No upcoming fixtures.</p>'}
+
+        `;
 
     })
     .catch(error => {
@@ -115,6 +152,7 @@ function loadScores() {
                 Failed to load scores.
             </div>
         `;
+
     });
 
 }
