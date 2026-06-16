@@ -1,23 +1,16 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
 from collections import defaultdict
-from .models import Team, Player, Match,Team,News
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
-from .models import Team, Player, Match, News
-
-from .models import Highlight
+from .models import Team, Player, Match, News, Highlight
+from .services import get_standings, get_live_matches
 
 def home(request):
     news = News.objects.all().order_by('-id')
     highlights = Highlight.objects.all().order_by('-id')
-
-    return render(
-        request,
-        'worldcup/home.html',
-        {
-            'news': news,
-            'highlights': highlights
-        }
-    )
+    return render(request, 'worldcup/home.html', {'news': news, 'highlights': highlights})
 
 def teams(request):
     teams = Team.objects.all()
@@ -34,87 +27,37 @@ def standings(request):
 def team_detail(request, id):
     team = get_object_or_404(Team, id=id)
     players = Player.objects.filter(team=team)
-
-    return render(
-        request,
-        'worldcup/team_detail.html',
-        {
-            'team': team,
-            'players': players
-        }
-    )
-
+    return render(request, 'worldcup/team_detail.html', {'team': team, 'players': players})
 
 def groups(request):
     teams = Team.objects.all()
-
-    groups = defaultdict(list)
-
+    groups_dict = defaultdict(list)
     for t in teams:
-        groups[t.group].append(t)
-
-    return render(request, 'worldcup/groups.html', {
-        'groups': groups
-    })
-
+        groups_dict[t.group].append(t)
+    return render(request, 'worldcup/groups.html', {'groups': groups_dict})
 
 def news_detail(request, id):
-    news = News.objects.get(id=id)
+    news = get_object_or_404(News, id=id)
     return render(request, 'worldcup/news_detail.html', {'news': news})
 
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+def live_standings(request):
+    data = get_standings()
+    standings_list = data.get("standings", []) if data else []
+    return render(request, "worldcup/live_standings.html", {"standings": standings_list})
+
+def live_scores(request):
+    return render(request, "worldcup/live_scores.html")
+
+def live_scores_api(request):
+    matches = get_live_matches()
+    return JsonResponse(matches, safe=False)
 
 def send_score_update(html_data):
     channel_layer = get_channel_layer()
-
     async_to_sync(channel_layer.group_send)(
         "scores",
         {
             "type": "score_update",
-            "data": {
-                "html": html_data
-            }
+            "data": {"html": html_data}
         }
     )
-
-
-
-
-from django.shortcuts import render
-from .services import get_standings
-
-def live_standings(request):
-    data = get_standings()
-
-    standings = []
-
-    if data:
-        standings = data.get("standings", [])
-
-    return render(
-        request,
-        "worldcup/live_standings.html",
-        {"standings": standings}
-    )
-
-
-from django.shortcuts import render
-from django.http import JsonResponse
-from .services import get_live_matches
-
-def live_scores(request):
-
-    return render(
-        request,
-        "worldcup/live_scores.html"
-    )
-
-def live_scores_api(request):
-
-    matches = get_live_matches()
-
-    return JsonResponse(matches, safe=False)
-
-
-

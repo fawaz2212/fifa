@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 import requests
 
 API_TOKEN = "ac3f9df41b9e4d37a2fe2f1320bd5e0b"
@@ -16,13 +17,8 @@ def get_standings():
 
     return None
 
-from datetime import date, timedelta
-import requests
-
-API_TOKEN = "ac3f9df41b9e4d37a2fe2f1320bd5e0b"
 
 def get_live_matches():
-
     url = "https://api.football-data.org/v4/competitions/WC/matches"
 
     headers = {
