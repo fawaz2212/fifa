@@ -7,14 +7,18 @@ from .models import Team, Player, Match, News
 from .models import Highlight
 
 def home(request):
-    news = News.objects.all()
-    highlights = Highlight.objects.all()
+    news = News.objects.all().order_by('-id')
 
-    return render(request, 'worldcup/home.html', {
-        'news': news,
-        'highlights': highlights
-    })
+    highlights = Highlight.objects.all().order_by('-id')
 
+    return render(
+        request,
+        'worldcup/home.html',
+        {
+            'news': news,
+            'highlights': highlights
+        }
+    )
 
 def teams(request):
     teams = Team.objects.all()
