@@ -1,0 +1,65 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<h2 class="text-center mb-4">
+🏆 Knockout Bracket
+</h2>
+
+<div class="row">
+
+<div class="col-md-3">
+<h4>Round of 16</h4>
+
+{% for match in round16 %}
+
+<div class="card p-2 mb-2">
+{{ match.home_team }} {{ match.home_score }}
+<br>
+{{ match.away_team }} {{ match.away_score }}
+</div>
+{% endfor %}
+</div>
+
+<div class="col-md-3">
+<h4>Quarter Finals</h4>
+
+{% for match in quarter %}
+
+<div class="card p-2 mb-2">
+{{ match.home_team }} {{ match.home_score }}
+<br>
+{{ match.away_team }} {{ match.away_score }}
+</div>
+{% endfor %}
+</div>
+
+<div class="col-md-3">
+<h4>Semi Finals</h4>
+
+{% for match in semi %}
+
+<div class="card p-2 mb-2">
+{{ match.home_team }} {{ match.home_score }}
+<br>
+{{ match.away_team }} {{ match.away_score }}
+</div>
+{% endfor %}
+</div>
+
+<div class="col-md-3">
+<h4>Final</h4>
+
+{% for match in final %}
+
+<div class="card p-2 mb-2 border border-warning">
+{{ match.home_team }} {{ match.home_score }}
+<br>
+{{ match.away_team }} {{ match.away_score }}
+</div>
+{% endfor %}
+</div>
+
+</div>
+
+{% endblock %}

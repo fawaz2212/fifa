@@ -61,3 +61,21 @@ def send_score_update(html_data):
             "data": {"html": html_data}
         }
     )
+
+
+
+from .models import KnockoutMatch
+
+def knockout(request):
+
+    round16 = KnockoutMatch.objects.filter(stage='Round of 16')
+    quarter = KnockoutMatch.objects.filter(stage='Quarter Final')
+    semi = KnockoutMatch.objects.filter(stage='Semi Final')
+    final = KnockoutMatch.objects.filter(stage='Final')
+
+    return render(request, 'worldcup/knockout.html', {
+        'round16': round16,
+        'quarter': quarter,
+        'semi': semi,
+        'final': final,
+    })

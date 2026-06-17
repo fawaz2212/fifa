@@ -79,3 +79,15 @@ class Highlight(models.Model):
     def __str__(self):
         return self.title
 
+
+from django.db import models
+
+class KnockoutMatch(models.Model):
+    stage = models.CharField(max_length=50)
+    home_team = models.CharField(max_length=100)
+    away_team = models.CharField(max_length=100)
+    home_score = models.IntegerField(default=0)
+    away_score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.home_team} vs {self.away_team}"
