@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Team, Player, Match, Stadium, News,Highlight,KnockoutMatch
+from .models import Team, Player, Match, Stadium, News,Highlight,KnockoutMatch,TopScorer
 
 admin.site.register(Team)
 admin.site.register(Player)
@@ -10,3 +10,5 @@ admin.site.register(News)
 admin.site.register(Highlight)
 
 admin.site.register(KnockoutMatch)
+
+admin.site.register(TopScorer)

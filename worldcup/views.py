@@ -79,3 +79,15 @@ def knockout(request):
         'semi': semi,
         'final': final,
     })
+
+
+from .models import TopScorer
+
+def top_scorers(request):
+    scorers = TopScorer.objects.all().order_by('-goals', '-assists')
+
+    return render(
+        request,
+        'worldcup/top_scorers.html',
+        {'scorers': scorers}
+    )

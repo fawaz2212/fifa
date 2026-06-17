@@ -1,0 +1,57 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<h2 class="text-center mb-4">
+🏆 FIFA World Cup 2026 Top Scorers
+</h2>
+
+<div class="table-responsive">
+
+<table class="table table-striped table-bordered">
+
+<thead class="table-dark">
+<tr>
+<th>#</th>
+<th>Player</th>
+<th>Country</th>
+<th>Goals</th>
+<th>Assists</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for player in scorers %}
+
+<tr>
+
+<td>{{ forloop.counter }}</td>
+
+<td>
+{% if player.photo %}
+<img src="{{ player.photo.url }}"
+     width="40"
+     height="40"
+     style="border-radius:50%;">
+{% endif %}
+{{ player.player_name }}
+</td>
+
+<td>{{ player.country }}</td>
+
+<td><strong>{{ player.goals }}</strong></td>
+
+<td>{{ player.assists }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% endblock %}

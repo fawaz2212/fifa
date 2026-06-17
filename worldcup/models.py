@@ -91,3 +91,14 @@ class KnockoutMatch(models.Model):
 
     def __str__(self):
         return f"{self.home_team} vs {self.away_team}"
+    
+
+class TopScorer(models.Model):
+    player_name = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    goals = models.IntegerField(default=0)
+    assists = models.IntegerField(default=0)
+    photo = models.ImageField(upload_to='scorers/', blank=True, null=True)
+
+    def __str__(self):
+        return self.player_name
