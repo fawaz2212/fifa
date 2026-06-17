@@ -2,27 +2,26 @@
 
 {% block content %}
 
-<!-- ================= HERO SECTION ================= -->
 <div class="hero">
 
-    <h1>🏆 FIFA World Cup 2026</h1>
 
-    <p>
-        Follow Teams, Players, Matches, Standings & Latest News
-    </p>
+<h1>🏆 FIFA World Cup 2026</h1>
 
-    
+<p>
+    Follow Teams, Players, Matches, Standings & Latest News
+</p>
+
 
 </div>
 
-<!-- ================= HIGHLIGHTS SECTION ================= -->
 <h2 class="section-title">🎥 Highlights</h2>
 
 <div class="row">
 
-    {% for h in highlights %}
 
-    <div class="col-md-4 mb-3">
+{% for h in highlights %}
+
+<div class="col-md-4 mb-3 {% if forloop.counter > 3 %}extra-highlight d-none{% endif %}">
 
     <a href="https://www.youtube.com/watch?v={{ h.youtube_id }}"
        target="_blank"
@@ -49,62 +48,128 @@
     </a>
 
 </div>
-    {% empty %}
-    <div class="col-12">
-        <div class="alert alert-info text-center">
-            No highlights available.
-        </div>
+
+{% empty %}
+
+<div class="col-12">
+    <div class="alert alert-info text-center">
+        No highlights available.
     </div>
-    {% endfor %}
+</div>
+
+{% endfor %}
+
 
 </div>
 
-<!-- ================= NEWS SECTION ================= -->
-<h2 class="section-title">Latest News</h2>
+{% if highlights|length > 3 %}
+
+<div class="text-center mb-5">
+    <button id="highlightBtn" class="btn btn-warning">
+        Show More
+    </button>
+</div>
+{% endif %}
+
+<h2 class="section-title">📰 Latest News</h2>
 
 <div class="row">
 
-    {% for item in news %}
 
-    <div class="col-md-4 mb-4">
+{% for item in news %}
 
-    <a href="{% url 'news_detail' item.id %}" class="text-decoration-none text-white">
-    
+<div class="col-md-4 mb-4 {% if forloop.counter > 3 %}extra-news d-none{% endif %}">
 
+    <a href="{% url 'news_detail' item.id %}"
+       class="text-decoration-none text-white">
 
-    <div class="card h-100">
+        <div class="card h-100">
 
-        {% if item.image %}
-        <img src="{{ item.image.url }}" class="card-img-top news-img">
-        {% endif %}
+            {% if item.image %}
+            <img src="{{ item.image.url }}"
+                 class="card-img-top news-img">
+            {% endif %}
 
-        <div class="card-body">
+            <div class="card-body">
 
-            <h5 class="card-title">{{ item.title }}</h5>
+                <h5 class="card-title">
+                    {{ item.title }}
+                </h5>
 
-            <p class="card-text">
-                {{ item.content|truncatewords:20 }}
-            </p>
+                <p class="card-text">
+                    {{ item.content|truncatewords:20 }}
+                </p>
+
+            </div>
 
         </div>
 
-    </div>
-
-</a>
- 
+    </a>
 
 </div>
 
-    {% empty %}
+{% empty %}
 
-    <div class="col-12">
-        <div class="alert alert-info text-center">
-            No news available.
-        </div>
+<div class="col-12">
+    <div class="alert alert-info text-center">
+        No news available.
     </div>
+</div>
 
-    {% endfor %}
+{% endfor %}
+
 
 </div>
+
+{% if news|length > 3 %}
+
+<div class="text-center mb-5">
+    <button id="newsBtn" class="btn btn-primary">
+        Show More
+    </button>
+</div>
+{% endif %}
+
+<script>
+
+const highlightBtn = document.getElementById('highlightBtn');
+
+if (highlightBtn) {
+
+    highlightBtn.addEventListener('click', function() {
+
+        document.querySelectorAll('.extra-highlight').forEach(item => {
+            item.classList.toggle('d-none');
+        });
+
+        this.textContent =
+            this.textContent === 'Show More'
+            ? 'Show Less'
+            : 'Show More';
+
+    });
+
+}
+
+const newsBtn = document.getElementById('newsBtn');
+
+if (newsBtn) {
+
+    newsBtn.addEventListener('click', function() {
+
+        document.querySelectorAll('.extra-news').forEach(item => {
+            item.classList.toggle('d-none');
+        });
+
+        this.textContent =
+            this.textContent === 'Show More'
+            ? 'Show Less'
+            : 'Show More';
+
+    });
+
+}
+
+</script>
 
 {% endblock %}
