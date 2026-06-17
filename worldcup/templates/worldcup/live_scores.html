@@ -6,7 +6,6 @@
     🔴 FIFA World Cup Live Scores
 </h2>
 
-
 <div class="text-center mb-4">
 
 <button class="btn btn-danger" onclick="showTab('today')">
@@ -23,22 +22,15 @@
 
 </div>
 
-
 <div id="today-tab">
     Loading matches...
 </div>
 
-
 <div id="recent-tab" style="display:none;"></div>
-
 
 <div id="upcoming-tab" style="display:none;"></div>
 
-
-
-
 <script>
-
 
 function showTab(tab){
 
@@ -47,172 +39,117 @@ function showTab(tab){
     document.getElementById('upcoming-tab').style.display='none';
 
     document.getElementById(tab+'-tab').style.display='block';
-
 }
-
-
-
 
 function loadScores(){
 
-
 fetch('/api/live-scores/')
-
-
 .then(res=>res.json())
-
-
 .then(matches=>{
 
-
-
 let todayMatches=[];
-
 let recentMatches=[];
-
 let upcomingMatches=[];
 
-
-
 let today=new Date();
-
 today.setHours(0,0,0,0);
-
-
-
-
 
 matches.forEach(match=>{
 
-
 let matchDate=new Date(match.utcDate);
 
-
 let onlyDate=new Date(matchDate);
-
 onlyDate.setHours(0,0,0,0);
-
-
-
-
 
 if(onlyDate.getTime()===today.getTime()){
 
     todayMatches.push(match);
 
 }
-
-
 else if(match.status==="FINISHED"){
-
 
     recentMatches.push(match);
 
-
 }
-
-
 else{
-
 
     upcomingMatches.push(match);
 
-
 }
 
-
-
 });
-
-
-
-
-// SORT NEWEST FIRST
-
 
 todayMatches.sort((a,b)=>{
-
-return new Date(b.utcDate)-new Date(a.utcDate);
-
+    return new Date(b.utcDate)-new Date(a.utcDate);
 });
-
-
 
 recentMatches.sort((a,b)=>{
-
-return new Date(b.utcDate)-new Date(a.utcDate);
-
+    return new Date(b.utcDate)-new Date(a.utcDate);
 });
-
-
-
-
-
-// UPCOMING NEAREST FIRST
-
 
 upcomingMatches.sort((a,b)=>{
-
-return new Date(a.utcDate)-new Date(b.utcDate);
-
+    return new Date(a.utcDate)-new Date(b.utcDate);
 });
 
-
-
-
-
-
-
-
 function createCard(match){
-
-
 
 let homeName =
 match.homeTeam?.name || "Home Team";
 
-
 let awayName =
 match.awayTeam?.name || "Away Team";
-
-
 
 let homeLogo =
 match.homeTeam?.crest ||
 "https://via.placeholder.com/50";
 
-
-
 let awayLogo =
 match.awayTeam?.crest ||
 "https://via.placeholder.com/50";
 
+let scorersHtml = '';
 
+if(match.goals && match.goals.length > 0){
 
+    scorersHtml = `
+
+    <div class="mt-3">
+
+        <strong>⚽ Goal Scorers</strong>
+
+        ${match.goals.map(goal => `
+            <div>
+                ${goal.minute || ''}' -
+                ${goal.scorer?.name || 'Unknown'}
+            </div>
+        `).join('')}
+
+    </div>
+
+    `;
+}
 
 return `
 
-
 <div class="match-card">
 
+<div class="group-title">
+${match.group || ''}
+</div>
 
 <div class="teams-row">
 
-
-
 <div class="team-side">
 
-<img src="${homeLogo}" class="team-logo">
+<img src="${homeLogo}"
+     class="team-logo"
+     alt="${homeName}">
 
 <span>${homeName}</span>
 
 </div>
 
-
-
-
 <div class="score-box">
-
 
 ${match.score?.fullTime?.home ?? "-"}
 
@@ -220,131 +157,79 @@ ${match.score?.fullTime?.home ?? "-"}
 
 ${match.score?.fullTime?.away ?? "-"}
 
-
-
 <div class="match-status">
-
 ${match.status}
-
 </div>
 
-
 </div>
-
-
-
-
 
 <div class="team-side">
 
-
-<img src="${awayLogo}" class="team-logo">
-
+<img src="${awayLogo}"
+     class="team-logo"
+     alt="${awayName}">
 
 <span>${awayName}</span>
 
+</div>
 
 </div>
 
-
-
-</div>
-
-
-
+${scorersHtml}
 
 <div class="match-time">
 
-
 📅 ${new Date(match.utcDate).toLocaleString()}
 
-
 </div>
 
-
-
 </div>
-
-
 
 `;
 
 }
 
-
-
-
 let todayHtml="";
-
 let recentHtml="";
-
 let upcomingHtml="";
 
-
-
-
 todayMatches.forEach(m=>{
-
-todayHtml += createCard(m);
-
+    todayHtml += createCard(m);
 });
-
-
 
 recentMatches.forEach(m=>{
-
-recentHtml += createCard(m);
-
+    recentHtml += createCard(m);
 });
-
-
 
 upcomingMatches.forEach(m=>{
-
-upcomingHtml += createCard(m);
-
+    upcomingHtml += createCard(m);
 });
 
-
-
-
-
 document.getElementById('today-tab').innerHTML =
-
-todayHtml || "No matches today";
-
-
+todayHtml || '<p class="text-center">No matches today.</p>';
 
 document.getElementById('recent-tab').innerHTML =
-
-recentHtml || "No recent matches";
-
-
+recentHtml || '<p class="text-center">No recent matches.</p>';
 
 document.getElementById('upcoming-tab').innerHTML =
-
-upcomingHtml || "No upcoming matches";
-
-
-
+upcomingHtml || '<p class="text-center">No upcoming matches.</p>';
 
 })
+.catch(err=>{
 
-.catch(err=>console.log(err));
+console.log(err);
+
+document.getElementById('today-tab').innerHTML =
+'<div class="alert alert-danger text-center">Failed to load scores.</div>';
+
+});
 
 }
 
-
-
-
 loadScores();
-
 
 setInterval(loadScores,30000);
 
-
-
 </script>
-
 
 {% endblock %}
