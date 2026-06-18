@@ -401,3 +401,38 @@ footer {
     height:50px;
     object-fit:contain;
 }
+
+
+.footer{
+    background:#111;
+    color:white;
+    padding:40px 0;
+    margin-top:50px;
+}
+
+.footer h5{
+    color:#ffc107;
+    margin-bottom:15px;
+}
+
+.footer-links{
+    list-style:none;
+    padding:0;
+}
+
+.footer-links li{
+    margin-bottom:8px;
+}
+
+.footer-links a{
+    color:white;
+    text-decoration:none;
+}
+
+.footer-links a:hover{
+    color:#ffc107;
+}
+
+.footer hr{
+    border-color:#444;
+}

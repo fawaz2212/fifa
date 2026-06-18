@@ -23,5 +23,8 @@ urlpatterns = [
     views.top_scorers,
     name='top_scorers'
 ),
+
+path('contact/', views.contact, name='contact'),
+
   
 ]

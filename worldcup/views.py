@@ -1,3 +1,5 @@
+from urllib import request
+
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from collections import defaultdict
@@ -95,3 +97,8 @@ def top_scorers(request):
         'worldcup/top_scorers.html',
         {'scorers': scorers}
     )
+
+
+
+def contact(request):
+    return render(request, 'worldcup/contact.html')
