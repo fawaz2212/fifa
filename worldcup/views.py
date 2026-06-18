@@ -63,22 +63,26 @@ def send_score_update(html_data):
     )
 
 
-
-from .models import KnockoutMatch
+from .models import Knockout
+from django.shortcuts import render
 
 def knockout(request):
 
-    round16 = KnockoutMatch.objects.filter(stage='Round of 16')
-    quarter = KnockoutMatch.objects.filter(stage='Quarter Final')
-    semi = KnockoutMatch.objects.filter(stage='Semi Final')
-    final = KnockoutMatch.objects.filter(stage='Final')
+    round16 = Knockout.objects.filter(stage='R16')
+    quarter = Knockout.objects.filter(stage='QF')
+    semi = Knockout.objects.filter(stage='SF')
+    final = Knockout.objects.filter(stage='F')
 
-    return render(request, 'worldcup/knockout.html', {
-        'round16': round16,
-        'quarter': quarter,
-        'semi': semi,
-        'final': final,
-    })
+    return render(
+        request,
+        'worldcup/knockout.html',
+        {
+            'round16': round16,
+            'quarter': quarter,
+            'semi': semi,
+            'final': final,
+        }
+    )
 
 
 from .models import TopScorer

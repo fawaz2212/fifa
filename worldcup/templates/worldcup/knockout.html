@@ -2,64 +2,224 @@
 
 {% block content %}
 
-<h2 class="text-center mb-4">
-🏆 Knockout Bracket
+<h2 class="text-center mb-5">
+    🏆 FIFA World Cup 2026 Knockout Stage
 </h2>
 
-<div class="row">
+<div class="bracket">
 
-<div class="col-md-3">
-<h4>Round of 16</h4>
 
-{% for match in round16 %}
+<!-- ROUND OF 16 -->
+<div class="round">
 
-<div class="card p-2 mb-2">
-{{ match.home_team }} {{ match.home_score }}
-<br>
-{{ match.away_team }} {{ match.away_score }}
-</div>
-{% endfor %}
-</div>
+    <h4>Round of 16</h4>
 
-<div class="col-md-3">
-<h4>Quarter Finals</h4>
+    {% for match in round16 %}
 
-{% for match in quarter %}
+    <div class="match-card">
 
-<div class="card p-2 mb-2">
-{{ match.home_team }} {{ match.home_score }}
-<br>
-{{ match.away_team }} {{ match.away_score }}
-</div>
-{% endfor %}
-</div>
+        <div class="team-row">
 
-<div class="col-md-3">
-<h4>Semi Finals</h4>
+            {% if match.home_logo %}
+            <img src="{{ match.home_logo.url }}" class="team-logo">
+            {% endif %}
 
-{% for match in semi %}
+            <span>{{ match.home_team }}</span>
 
-<div class="card p-2 mb-2">
-{{ match.home_team }} {{ match.home_score }}
-<br>
-{{ match.away_team }} {{ match.away_score }}
-</div>
-{% endfor %}
-</div>
+            <strong>{{ match.home_score }}</strong>
 
-<div class="col-md-3">
-<h4>Final</h4>
+        </div>
 
-{% for match in final %}
+        <div class="team-row">
 
-<div class="card p-2 mb-2 border border-warning">
-{{ match.home_team }} {{ match.home_score }}
-<br>
-{{ match.away_team }} {{ match.away_score }}
-</div>
-{% endfor %}
-</div>
+            {% if match.away_logo %}
+            <img src="{{ match.away_logo.url }}" class="team-logo">
+            {% endif %}
+
+            <span>{{ match.away_team }}</span>
+
+            <strong>{{ match.away_score }}</strong>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
 
 </div>
+
+<!-- QUARTER FINALS -->
+<div class="round">
+
+    <h4>Quarter Finals</h4>
+
+    {% for match in quarter %}
+
+    <div class="match-card">
+
+        <div class="team-row">
+
+            {% if match.home_logo %}
+            <img src="{{ match.home_logo.url }}" class="team-logo">
+            {% endif %}
+
+            <span>{{ match.home_team }}</span>
+
+            <strong>{{ match.home_score }}</strong>
+
+        </div>
+
+        <div class="team-row">
+
+            {% if match.away_logo %}
+            <img src="{{ match.away_logo.url }}" class="team-logo">
+            {% endif %}
+
+            <span>{{ match.away_team }}</span>
+
+            <strong>{{ match.away_score }}</strong>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- SEMI FINALS -->
+<div class="round">
+
+    <h4>Semi Finals</h4>
+
+    {% for match in semi %}
+
+    <div class="match-card">
+
+        <div class="team-row">
+
+            {% if match.home_logo %}
+            <img src="{{ match.home_logo.url }}" class="team-logo">
+            {% endif %}
+
+            <span>{{ match.home_team }}</span>
+
+            <strong>{{ match.home_score }}</strong>
+
+        </div>
+
+        <div class="team-row">
+
+            {% if match.away_logo %}
+            <img src="{{ match.away_logo.url }}" class="team-logo">
+            {% endif %}
+
+            <span>{{ match.away_team }}</span>
+
+            <strong>{{ match.away_score }}</strong>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- FINAL -->
+<div class="round">
+
+    <h4>Final</h4>
+
+    {% for match in final %}
+
+    <div class="match-card champion">
+
+        <div class="team-row">
+
+            {% if match.home_logo %}
+            <img src="{{ match.home_logo.url }}" class="team-logo">
+            {% endif %}
+
+            <span>{{ match.home_team }}</span>
+
+            <strong>{{ match.home_score }}</strong>
+
+        </div>
+
+        <div class="team-row">
+
+            {% if match.away_logo %}
+            <img src="{{ match.away_logo.url }}" class="team-logo">
+            {% endif %}
+
+            <span>{{ match.away_team }}</span>
+
+            <strong>{{ match.away_score }}</strong>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+
+</div>
+
+<style>
+
+.bracket{
+    display:flex;
+    gap:25px;
+    overflow-x:auto;
+    padding-bottom:20px;
+}
+
+.round{
+    min-width:260px;
+}
+
+.round h4{
+    text-align:center;
+    color:#ffc107;
+    margin-bottom:20px;
+}
+
+.match-card{
+    background:#1f1f1f;
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,.25);
+}
+
+.team-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:8px 0;
+}
+
+.team-logo{
+    width:32px;
+    height:32px;
+    object-fit:contain;
+    margin-right:8px;
+}
+
+.team-row span{
+    flex:1;
+    margin-left:8px;
+}
+
+.champion{
+    border:2px solid gold;
+    background:#2b2b2b;
+}
+
+</style>
 
 {% endblock %}
