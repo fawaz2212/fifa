@@ -102,3 +102,10 @@ def top_scorers(request):
 
 def contact(request):
     return render(request, 'worldcup/contact.html')
+
+
+def about(request):
+    return render(request, 'worldcup/about.html')
+
+def privacy(request):
+    return render(request, 'worldcup/privacy.html')
