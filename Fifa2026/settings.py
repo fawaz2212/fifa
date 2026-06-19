@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'worldcup',
     'channels',
+    'django.contrib.sitemaps',
+
 ]
 
 MIDDLEWARE = [

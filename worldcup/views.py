@@ -109,3 +109,14 @@ def about(request):
 
 def privacy(request):
     return render(request, 'worldcup/privacy.html')
+
+
+from django.http import HttpResponse
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Sitemap: https://fifa-0a6i.onrender.com/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
