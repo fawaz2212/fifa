@@ -31,39 +31,59 @@
 
 {% if match_of_day %}
 
-<div class="card mb-5 border-warning">
+<div class="card border-warning mb-4">
 
-    <div class="card-header bg-warning text-dark text-center fw-bold">
-        🔥 Match of the Day
-    </div>
 
-    <div class="card-body text-center">
+<div class="card-header bg-warning text-dark text-center fw-bold py-2">
+    🔥 Match of the Day
+</div>
 
-        <div class="row align-items-center">
+<div class="card-body py-3">
 
-            <div class="col-md-5">
-                <img src="{{ match_of_day.homeTeam.crest }}"
-                     width="80">
-                <h4>{{ match_of_day.homeTeam.name }}</h4>
-            </div>
+    <div class="d-flex justify-content-center align-items-center">
 
-            <div class="col-md-2">
-                <h2 class="text-warning">VS</h2>
-            </div>
+        <div class="text-center mx-3">
 
-            <div class="col-md-5">
-                <img src="{{ match_of_day.awayTeam.crest }}"
-                     width="80">
-                <h4>{{ match_of_day.awayTeam.name }}</h4>
+            <img src="{{ match_of_day.homeTeam.crest }}"
+                 width="50"
+                 height="50"
+                 style="object-fit:contain;">
+
+            <div class="mt-1 fw-bold">
+                {{ match_of_day.homeTeam.name }}
             </div>
 
         </div>
 
-        <p class="mt-3">
-            {{ match_of_day.status }}
-        </p>
+        <div class="text-center mx-4">
+
+            <h4 class="text-warning mb-1">
+                VS
+            </h4>
+
+            <span class="badge bg-danger">
+                {{ match_of_day.status }}
+            </span>
+
+        </div>
+
+        <div class="text-center mx-3">
+
+            <img src="{{ match_of_day.awayTeam.crest }}"
+                 width="50"
+                 height="50"
+                 style="object-fit:contain;">
+
+            <div class="mt-1 fw-bold">
+                {{ match_of_day.awayTeam.name }}
+            </div>
+
+        </div>
 
     </div>
+
+</div>
+
 
 </div>
 
