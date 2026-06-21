@@ -12,6 +12,16 @@ body {
     color: white !important;
 }
 
+.table-dark tbody tr.qualified td{
+    background-color:#14532d !important;
+    color:white !important;
+}
+
+.table-dark tbody tr.eliminated td{
+    background-color:#7f1d1d !important;
+    color:white !important;
+}
+
 
 
 /* ===== NEWS ===== */
@@ -213,4 +223,91 @@ body {
 /* Prevent row expansion */
 .table tr{
     height: 55px;
+}
+
+
+.position-cell{
+    width:60px;
+}
+
+.qualify-green{
+    border-left:5px solid #22c55e;
+    padding-left:10px;
+    font-weight:bold;
+    color:white;
+}
+
+.qualify-yellow{
+    border-left:5px solid #facc15;
+    padding-left:10px;
+    font-weight:bold;
+    color:white;
+}
+
+.qualify-red{
+    border-left:5px solid #ef4444;
+    padding-left:10px;
+    font-weight:bold;
+    color:white;
+}
+
+.standing-flag{
+    width:35px;
+    height:25px;
+    object-fit:cover;
+    border-radius:4px;
+}
+
+.qualification-legend{
+    color:#cbd5e1;
+    font-size:13px;
+}
+
+.legend-green,
+.legend-yellow,
+.legend-red{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    margin-right:6px;
+}
+
+.legend-green{
+    background:#22c55e;
+}
+
+.legend-yellow{
+    background:#facc15;
+}
+
+.legend-red{
+    background:#ef4444;
+}
+
+
+
+.match-of-day{
+    background:#1e293b;
+    border:2px solid #facc15;
+    border-radius:20px;
+}
+
+.match-of-day .card-header{
+    background:#facc15;
+    color:black;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.motd-flag{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+}
+
+.motd-score{
+    color:#facc15;
+    font-size:48px;
+    font-weight:bold;
 }

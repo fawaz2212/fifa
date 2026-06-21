@@ -16,3 +16,4 @@ from django.contrib import admin
 from .models import Knockout
 
 admin.site.register(Knockout)
+

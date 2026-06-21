@@ -9,10 +9,53 @@ from channels.layers import get_channel_layer
 from .models import Team, Player, Match, News, Highlight
 from .services import get_standings, get_live_matches
 
+from .models import News, Highlight
+from .utils import get_live_matches
+
 def home(request):
     news = News.objects.all().order_by('-id')
     highlights = Highlight.objects.all().order_by('-id')
-    return render(request, 'worldcup/home.html', {'news': news, 'highlights': highlights})
+
+    matches = get_live_matches()
+
+    match_of_day = None
+
+    if matches:
+
+        # Live match first
+        live_matches = [
+            m for m in matches
+            if m.get('status') in ['IN_PLAY', 'PAUSED']
+        ]
+
+        if live_matches:
+            match_of_day = live_matches[0]
+
+        else:
+
+            # Upcoming match
+            upcoming_matches = [
+                m for m in matches
+                if m.get('status') in ['SCHEDULED', 'TIMED']
+            ]
+
+            if upcoming_matches:
+                match_of_day = upcoming_matches[0]
+
+            else:
+                # Fallback
+                match_of_day = matches[0]
+
+    return render(
+        request,
+        'worldcup/home.html',
+        {
+            'news': news,
+            'highlights': highlights,
+            'match_of_day': match_of_day,
+        }
+    )
+
 
 def teams(request):
     teams = Team.objects.all()
