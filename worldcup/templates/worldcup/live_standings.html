@@ -21,7 +21,6 @@
             <table class="table table-dark table-hover align-middle mb-0">
 
                 <thead>
-
                     <tr>
                         <th>#</th>
                         <th>Team</th>
@@ -34,7 +33,6 @@
                         <th>GD</th>
                         <th>Pts</th>
                     </tr>
-
                 </thead>
 
                 <tbody>
@@ -43,9 +41,7 @@
 
                     <tr>
 
-                        <td>
-                            {{ team.position }}
-                        </td>
+                        <td>{{ team.position }}</td>
 
                         <td>
 
@@ -54,29 +50,21 @@
                                 <img
                                     src="{{ team.team.crest }}"
                                     alt="{{ team.team.name }}"
-                                    class="team-flag me-2"
+                                    class="standing-flag me-2"
                                 >
 
-                                <span>
-                                    {{ team.team.name }}
-                                </span>
+                                <span>{{ team.team.name }}</span>
 
                             </div>
 
                         </td>
 
                         <td>{{ team.playedGames }}</td>
-
                         <td>{{ team.won }}</td>
-
                         <td>{{ team.draw }}</td>
-
                         <td>{{ team.lost }}</td>
-
                         <td>{{ team.goalsFor }}</td>
-
                         <td>{{ team.goalsAgainst }}</td>
-
                         <td>{{ team.goalDifference }}</td>
 
                         <td>

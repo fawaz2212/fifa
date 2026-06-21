@@ -24,11 +24,13 @@ body {
 }
 
 
+/* News Detail Page Image */
+
 .news-detail-img{
     width: 100%;
-    max-height: 700px;   /* change to 250px if you want smaller */
+    max-height: 550px !important;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 12px 12px 0 0;
 }
 
 /* ===== TEAMS ===== */
@@ -57,6 +59,7 @@ body {
     color:#facc15;
     font-weight:bold;
 }
+
 
 /* ===== LIVE SCORES ===== */
 
@@ -187,4 +190,27 @@ body {
 
 .footer hr{
     border-color:#444;
+}
+
+
+
+/* Standings table */
+.table td,
+.table th{
+    vertical-align: middle;
+    padding: 10px;
+}
+
+/* Small flag */
+.standing-flag{
+    width: 35px !important;
+    height: 25px !important;
+    object-fit: cover;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Prevent row expansion */
+.table tr{
+    height: 55px;
 }
