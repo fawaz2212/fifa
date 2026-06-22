@@ -57,6 +57,8 @@ def home(request):
     )
 
 
+
+
 def teams(request):
     teams = Team.objects.all()
     return render(request, 'worldcup/teams.html', {'teams': teams})
@@ -163,3 +165,29 @@ def robots_txt(request):
         "Sitemap: https://fifa-0a6i.onrender.com/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+
+from django.db.models import Q
+
+def search(request):
+    query = request.GET.get('q')
+
+    teams = Team.objects.filter(
+        Q(name__icontains=query)
+    ) if query else []
+
+    players = Player.objects.filter(
+        Q(name__icontains=query)
+    ) if query else []
+
+    news = News.objects.filter(
+        Q(title__icontains=query)
+    ) if query else []
+
+    return render(request, 'worldcup/search.html', {
+        'query': query,
+        'teams': teams,
+        'players': players,
+        'news': news,
+    })

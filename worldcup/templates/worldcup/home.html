@@ -5,365 +5,168 @@
 <meta name="google-site-verification" content="QgedqydjQli-mz_GYETmABRnGSAW4_pdMlugA3nFP58" />
 
 <div class="hero">
+    <h1>🏆 FIFA World Cup 2026</h1>
+    <p>Follow Teams, Players, Matches, Standings & Latest News</p>
 
-
-<h1>🏆 FIFA World Cup 2026</h1>
-
-<p>
-    Follow Teams, Players, Matches, Standings & Latest News
-</p>
-
-<div class="card text-center p-4 mb-4">
-
-    <h3>⏳ Next Match Countdown</h3>
-
-    <h5 id="next-match">
-        Loading...
-    </h5>
-
-    <div id="countdown"
-         style="font-size:30px;font-weight:bold;">
+    <div class="card text-center p-4 mb-4">
+        <h3>⏳ Next Match Countdown</h3>
+        <h5 id="next-match">Loading...</h5>
+        <div id="countdown" style="font-size:30px;font-weight:bold;"></div>
     </div>
-
-</div>
-
 </div>
 
 {% if match_of_day %}
-
 <div class="card border-warning mb-4">
-
-
-<div class="card-header bg-warning text-dark text-center fw-bold py-2">
-    🔥 Match of the Day
-</div>
-
-<div class="card-body py-3">
-
-    <div class="d-flex justify-content-center align-items-center">
-
-        <div class="text-center mx-3">
-
-            <img src="{{ match_of_day.homeTeam.crest }}"
-                 width="50"
-                 height="50"
-                 style="object-fit:contain;">
-
-            <div class="mt-1 fw-bold">
-                {{ match_of_day.homeTeam.name }}
-            </div>
-
-        </div>
-
-        <div class="text-center mx-4">
-
-            <h4 class="text-warning mb-1">
-                VS
-            </h4>
-
-            <span class="badge bg-danger">
-                {{ match_of_day.status }}
-            </span>
-
-        </div>
-
-        <div class="text-center mx-3">
-
-            <img src="{{ match_of_day.awayTeam.crest }}"
-                 width="50"
-                 height="50"
-                 style="object-fit:contain;">
-
-            <div class="mt-1 fw-bold">
-                {{ match_of_day.awayTeam.name }}
-            </div>
-
-        </div>
-
+    <div class="card-header bg-warning text-dark text-center fw-bold py-2">
+        🔥 Match of the Day
     </div>
-
+    <div class="card-body py-3">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="text-center mx-3">
+                <img src="{{ match_of_day.homeTeam.crest }}" width="50" height="50" style="object-fit:contain;">
+                <div class="mt-1 fw-bold">{{ match_of_day.homeTeam.name }}</div>
+            </div>
+            <div class="text-center mx-4">
+                <h4 class="text-warning mb-1">VS</h4>
+                <span class="badge bg-danger">{{ match_of_day.status }}</span>
+            </div>
+            <div class="text-center mx-3">
+                <img src="{{ match_of_day.awayTeam.crest }}" width="50" height="50" style="object-fit:contain;">
+                <div class="mt-1 fw-bold">{{ match_of_day.awayTeam.name }}</div>
+            </div>
+        </div>
+    </div>
 </div>
-
-
-</div>
-
 {% endif %}
 
 <h2 class="section-title">🎥 Highlights</h2>
-
 <div class="row">
-
-
-
-
-{% for h in highlights %}
-
-<div class="col-md-4 mb-3 {% if forloop.counter > 3 %}extra-highlight d-none{% endif %}">
-
-    <a href="https://www.youtube.com/watch?v={{ h.youtube_id }}"
-       target="_blank"
-       class="text-decoration-none">
-
-        <div class="card p-2">
-
-            <img src="https://img.youtube.com/vi/{{ h.youtube_id }}/0.jpg"
-                 class="card-img-top"
-                 style="height:220px; object-fit:cover;">
-
-            <div class="card-body text-center">
-
-                <h5>{{ h.title }}</h5>
-
-                <span class="btn btn-sm btn-warning">
-                    ▶ Watch
-                </span>
-
+    {% for h in highlights %}
+    <div class="col-md-4 mb-3 {% if forloop.counter > 3 %}extra-highlight d-none{% endif %}">
+        <a href="https://www.youtube.com/watch?v={{ h.youtube_id }}" target="_blank" class="text-decoration-none">
+            <div class="card p-2">
+                <img src="https://img.youtube.com/vi/{{ h.youtube_id }}/0.jpg" class="card-img-top" style="height:220px; object-fit:cover;">
+                <div class="card-body text-center">
+                    <h5>{{ h.title }}</h5>
+                    <span class="btn btn-sm btn-warning">▶ Watch</span>
+                </div>
             </div>
-
-        </div>
-
-    </a>
-
-</div>
-
-{% empty %}
-
-<div class="col-12">
-    <div class="alert alert-info text-center">
-        No highlights available.
+        </a>
     </div>
-</div>
-
-{% endfor %}
-
-
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">No highlights available.</div>
+    </div>
+    {% endfor %}
 </div>
 
 {% if highlights|length > 3 %}
-
-<div class="text-center mb-5">
-    <button id="highlightBtn" class="btn btn-warning">
-        Show More
-    </button>
+<div class="text-center mb-4">
+    <button id="highlightBtn" class="btn btn-warning">Show More</button>
 </div>
 {% endif %}
 
 <h2 class="section-title">📰 Latest News</h2>
-
 <div class="row">
-
-
-{% for item in news %}
-
-<div class="col-md-4 mb-4 {% if forloop.counter > 3 %}extra-news d-none{% endif %}">
-
-    <a href="{% url 'news_detail' item.id %}"
-       class="text-decoration-none text-white">
-
-        <div class="card h-100">
-
-            {% if item.image %}
-            <img src="{{ item.image.url }}"
-                 class="card-img-top news-img">
-            {% endif %}
-
-            <div class="card-body">
-
-                <h5 class="card-title">
-                    {{ item.title }}
-                </h5>
-
-                <p class="card-text">
-                    {{ item.content|truncatewords:20 }}
-                </p>
-
+    {% for item in news %}
+    <div class="col-md-4 mb-3 {% if forloop.counter > 3 %}extra-news d-none{% endif %}">
+        <a href="{% url 'news_detail' item.id %}" class="text-decoration-none text-white">
+            <div class="card h-100">
+                {% if item.image %}
+                <img src="{{ item.image.url }}" class="card-img-top news-img">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                    <p class="card-text">{{ item.content|truncatewords:20 }}</p>
+                </div>
             </div>
-
-        </div>
-
-    </a>
-
-</div>
-
-{% empty %}
-
-<div class="col-12">
-    <div class="alert alert-info text-center">
-        No news available.
+        </a>
     </div>
-</div>
-
-{% endfor %}
-
-
+    {% empty %}
+    <div class="col-12 mb-3">
+        <div class="alert alert-info text-center">No news available.</div>
+    </div>
+    {% endfor %}
 </div>
 
 {% if news|length > 3 %}
-
-<div class="text-center mb-5">
-    <button id="newsBtn" class="btn btn-primary">
-        Show More
-    </button>
+<div class="text-center mb-2">
+    <button id="newsBtn" class="btn btn-primary">Show More</button>
 </div>
 {% endif %}
 
 <script>
-
 const highlightBtn = document.getElementById('highlightBtn');
-
 if (highlightBtn) {
-
     highlightBtn.addEventListener('click', function() {
-
         document.querySelectorAll('.extra-highlight').forEach(item => {
             item.classList.toggle('d-none');
         });
-
-        this.textContent =
-            this.textContent === 'Show More'
-            ? 'Show Less'
-            : 'Show More';
-
+        this.textContent = this.textContent === 'Show More' ? 'Show Less' : 'Show More';
     });
-
 }
 
 const newsBtn = document.getElementById('newsBtn');
-
 if (newsBtn) {
-
     newsBtn.addEventListener('click', function() {
-
         document.querySelectorAll('.extra-news').forEach(item => {
             item.classList.toggle('d-none');
         });
-
-        this.textContent =
-            this.textContent === 'Show More'
-            ? 'Show Less'
-            : 'Show More';
-
+        this.textContent = this.textContent === 'Show More' ? 'Show Less' : 'Show More';
     });
-
 }
-
 </script>
 
 <script>
-
 fetch('/api/live-scores/')
 .then(response => response.json())
 .then(matches => {
-
-    const upcoming = matches.filter(match =>
-        match.status !== "FINISHED"
-    );
-
-    upcoming.sort((a,b) =>
-        new Date(a.utcDate) - new Date(b.utcDate)
-    );
+    const upcoming = matches.filter(match => match.status !== "FINISHED");
+    upcoming.sort((a,b) => new Date(a.utcDate) - new Date(b.utcDate));
 
     if(upcoming.length === 0){
-
-        document.getElementById('countdown').innerHTML =
-            'No upcoming matches';
-
+        document.getElementById('countdown').innerHTML = 'No upcoming matches';
         return;
     }
 
     const nextMatch = upcoming[0];
-
-    console.log(nextMatch);
-
     document.getElementById('next-match').innerHTML = `
-
     <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
-
         <div class="text-center">
-
-            <img src="${nextMatch.homeTeam?.crest || 'https://via.placeholder.com/50'}"
-                 width="50"
-                 height="50"
-                 style="object-fit:contain;">
-
-            <div style="font-size:14px;font-weight:600;">
-                ${nextMatch.homeTeam?.name || ''}
-            </div>
-
+            <img src="${nextMatch.homeTeam?.crest || 'https://via.placeholder.com/50'}" width="50" height="50" style="object-fit:contain;">
+            <div style="font-size:14px;font-weight:600;">${nextMatch.homeTeam?.name || ''}</div>
         </div>
-
-        <div style="font-size:20px;font-weight:bold;color:#ffc107;">
-            VS
-        </div>
-
+        <div style="font-size:20px;font-weight:bold;color:#ffc107;">VS</div>
         <div class="text-center">
-
-            <img src="${nextMatch.awayTeam?.crest || 'https://via.placeholder.com/50'}"
-                 width="50"
-                 height="50"
-                 style="object-fit:contain;">
-
-            <div style="font-size:14px;font-weight:600;">
-                ${nextMatch.awayTeam?.name || ''}
-            </div>
-
+            <img src="${nextMatch.awayTeam?.crest || 'https://via.placeholder.com/50'}" width="50" height="50" style="object-fit:contain;">
+            <div style="font-size:14px;font-weight:600;">${nextMatch.awayTeam?.name || ''}</div>
         </div>
-
     </div>
-
-    <div class="mt-2">
-        📅 ${new Date(nextMatch.utcDate).toLocaleString()}
-    </div>
-
+    <div class="mt-2">📅 ${new Date(nextMatch.utcDate).toLocaleString()}</div>
     `;
 
     const matchTime = new Date(nextMatch.utcDate).getTime();
-
     setInterval(function(){
-
         const now = new Date().getTime();
-
         const distance = matchTime - now;
 
         if(distance < 0){
-
-            document.getElementById('countdown').innerHTML =
-                '🔴 Match Started';
-
+            document.getElementById('countdown').innerHTML = '🔴 Match Started';
             return;
         }
 
-        const days =
-            Math.floor(distance / (1000*60*60*24));
+        const days = Math.floor(distance / (1000*60*60*24));
+        const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+        const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+        const seconds = Math.floor((distance % (1000*60)) / 1000);
 
-        const hours =
-            Math.floor((distance % (1000*60*60*24))
-            /(1000*60*60));
-
-        const minutes =
-            Math.floor((distance % (1000*60*60))
-            /(1000*60));
-
-        const seconds =
-            Math.floor((distance % (1000*60))
-            /1000);
-
-        document.getElementById('countdown').innerHTML =
-            `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-    },1000);
-
+        document.getElementById('countdown').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
 })
 .catch(error => {
-
     console.error(error);
-
-    document.getElementById('countdown').innerHTML =
-        'Failed to load countdown';
-
+    document.getElementById('countdown').innerHTML = 'Failed to load countdown';
 });
-
 </script>
-
 
 {% endblock %}

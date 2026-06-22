@@ -1,0 +1,47 @@
+{% extends 'worldcup/base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+
+<h2>
+    Search Results for "{{ query }}"
+</h2>
+
+<hr>
+
+<h3>🏆 Teams</h3>
+
+{% for team in teams %}
+    <div class="card mb-2 p-2">
+        {{ team.name }}
+    </div>
+{% empty %}
+    <p>No teams found.</p>
+{% endfor %}
+
+<h3 class="mt-4">⚽ Players</h3>
+
+{% for player in players %}
+    <div class="card mb-2 p-2">
+        {{ player.name }}
+    </div>
+{% empty %}
+    <p>No players found.</p>
+{% endfor %}
+
+<h3 class="mt-4">📰 News</h3>
+
+{% for item in news %}
+    <div class="card mb-2 p-2">
+        {{ item.title }}
+    </div>
+{% empty %}
+    <p>No news found.</p>
+{% endfor %}
+
+
+</div>
+
+{% endblock %}

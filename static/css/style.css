@@ -299,6 +299,10 @@ body {
     font-size:22px;
     font-weight:bold;
 }
+.match-day-card{
+    max-width:900px;
+    margin:auto;
+}
 
 .motd-flag{
     width:100px;
@@ -310,4 +314,31 @@ body {
     color:#facc15;
     font-size:48px;
     font-weight:bold;
+}
+
+
+.search-form{
+    max-width:350px;
+}
+
+.search-input{
+    border-radius:10px;
+    height:42px;
+}
+
+.search-input{
+    background-color:#0f172a !important;
+    color:white !important;
+    border:1px solid #334155 !important;
+}
+
+.search-input::placeholder{
+    color:#94a3b8 !important;
+}
+
+.search-input:focus{
+    background-color:#0f172a !important;
+    color:white !important;
+    border-color:#facc15 !important;
+    box-shadow:0 0 5px rgba(250,204,21,.4) !important;
 }
