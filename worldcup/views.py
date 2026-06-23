@@ -9,54 +9,94 @@ from channels.layers import get_channel_layer
 from .models import Team, Player, Match, News, Highlight
 from .services import get_standings, get_live_matches
 
+from datetime import datetime
+from django.shortcuts import render
 from .models import News, Highlight
 from .utils import get_live_matches
 
+
 def home(request):
+
     news = News.objects.all().order_by('-id')
     highlights = Highlight.objects.all().order_by('-id')
 
     matches = get_live_matches()
 
+    fifa_ranks = {
+        "Argentina": 1,
+        "France": 2,
+        "Spain": 3,
+        "England": 6,
+        "Brazil": 5,
+        "Portugal": 4,
+        "Netherlands": 7,
+        "Belgium": 8,
+        "Italy": 9,
+        "Germany": 10,
+        "Croatia": 11,
+        "Morocco": 12,
+        "Uruguay": 13,
+        "Colombia": 14,
+    }
+
+    today = datetime.utcnow().date()
+
+    today_matches = []
+
+    for match in matches:
+
+        try:
+            match_date = datetime.fromisoformat(
+                match["utcDate"].replace("Z", "+00:00")
+            ).date()
+
+            if match_date == today:
+
+                home_team = match.get("homeTeam", {}).get("name", "")
+                away_team = match.get("awayTeam", {}).get("name", "")
+
+                rank_score = (
+                    fifa_ranks.get(home_team, 999)
+                    + fifa_ranks.get(away_team, 999)
+                )
+
+                today_matches.append({
+                    "match": match,
+                    "score": rank_score
+                })
+
+        except:
+            pass
+
     match_of_day = None
 
-    if matches:
+    if today_matches:
 
-        # Live match first
-        live_matches = [
+        today_matches.sort(
+            key=lambda x: x["score"]
+        )
+
+        match_of_day = today_matches[0]["match"]
+
+    else:
+
+        upcoming_matches = [
             m for m in matches
-            if m.get('status') in ['IN_PLAY', 'PAUSED']
+            if m.get("status") == "SCHEDULED"
         ]
 
-        if live_matches:
-            match_of_day = live_matches[0]
-
-        else:
-
-            # Upcoming match
-            upcoming_matches = [
-                m for m in matches
-                if m.get('status') in ['SCHEDULED', 'TIMED']
-            ]
-
-            if upcoming_matches:
-                match_of_day = upcoming_matches[0]
-
-            else:
-                # Fallback
-                match_of_day = matches[0]
+        if upcoming_matches:
+            match_of_day = upcoming_matches[0]
 
     return render(
         request,
-        'worldcup/home.html',
+        "worldcup/home.html",
         {
-            'news': news,
-            'highlights': highlights,
-            'match_of_day': match_of_day,
+            "news": news,
+            "highlights": highlights,
+            "match_of_day": match_of_day,
         }
     )
-
-
 
 
 def teams(request):
