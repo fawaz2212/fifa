@@ -13,7 +13,7 @@
 
 <div id="countdown" style="font-size:30px;font-weight:bold;"></div>
 
-<div id="live-score-box" class="mt-3"></div>
+
 
     </div>
     </div>
@@ -182,8 +182,12 @@ fetch('/api/live-scores/')
     </div>
 
     <div class="mt-2">
-        📅 ${new Date(nextMatch.utcDate).toLocaleString()}
-    </div>
+    🕒 ${new Date(nextMatch.utcDate).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+    })}
+</div>
+
 
     `;
 
@@ -197,84 +201,66 @@ fetch('/api/live-scores/')
 
         if(distance < 0){
 
+    fetch('/api/live-scores/')
+    .then(res => res.json())
+    .then(matches => {
+
+        let liveMatch = matches.find(
+            m => m.status === "IN_PLAY"
+        );
+
+        if(liveMatch){
+
+            document.getElementById('countdown').innerHTML = `
+
+            <div class="text-center">
+
+                <span class="badge bg-danger mb-2">
+                    🔴 LIVE
+                </span>
+
+                <div class="text-warning fw-bold"
+                     style="font-size:40px;">
+
+                    ${liveMatch.score?.fullTime?.home ??
+                      liveMatch.score?.halfTime?.home ?? 0}
+
+                    -
+
+                    ${liveMatch.score?.fullTime?.away ??
+                      liveMatch.score?.halfTime?.away ?? 0}
+
+                </div>
+
+                <div class="mt-2">
+
+                    ${liveMatch.homeTeam?.name}
+
+                    vs
+
+                    ${liveMatch.awayTeam?.name}
+
+                </div>
+
+            </div>
+
+            `;
+
+        } else {
+
             document.getElementById('countdown').innerHTML =
-            '🔴 LIVE MATCH';
+            'No live match currently';
 
-            fetch('/api/live-scores/')
-            .then(res => res.json())
-            .then(matches => {
-
-                let liveMatch = matches.find(
-                    m => m.status === "IN_PLAY"
-                );
-
-                if(liveMatch){
-
-                    document.getElementById('live-score-box').innerHTML = `
-
-                    <div class="card bg-dark border-danger mt-3">
-
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-center align-items-center gap-3">
-
-                                <div class="text-center">
-
-                                    <img src="${liveMatch.homeTeam?.crest || ''}"
-                                         width="40">
-
-                                    <div>
-                                        ${liveMatch.homeTeam?.name}
-                                    </div>
-
-                                </div>
-
-                                <div class="text-warning fw-bold fs-3">
-
-    ${liveMatch.score?.fullTime?.home ??
-      liveMatch.score?.halfTime?.home ?? 0}
-
-    -
-
-    ${liveMatch.score?.fullTime?.away ??
-      liveMatch.score?.halfTime?.away ?? 0}
-
-</div>
-
-
-                                <div class="text-center">
-
-                                    <img src="${liveMatch.awayTeam?.crest || ''}"
-                                         width="40">
-
-                                    <div>
-                                        ${liveMatch.awayTeam?.name}
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="text-center mt-2">
-
-                                <span class="badge bg-danger">
-                                    LIVE
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    `;
-                }
-
-            });
-
-            return;
         }
 
+    });
+
+    return;
+}
+
+
+
+     
         const days =
             Math.floor(distance / (1000*60*60*24));
 
