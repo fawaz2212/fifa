@@ -123,173 +123,154 @@ if (newsBtn) {
 
 <script>
 
+function loadMatch(){
+
 fetch('/api/live-scores/')
 .then(response => response.json())
-.then(matches => {
+.then(matches=>{
 
-    const upcoming = matches.filter(match =>
-        match.status !== "FINISHED"
-    );
-
-    upcoming.sort((a,b) =>
-        new Date(a.utcDate) - new Date(b.utcDate)
-    );
-
-    if(upcoming.length === 0){
-
-        document.getElementById('countdown').innerHTML =
-            'No upcoming matches';
-
-        return;
-    }
-
-    const nextMatch = upcoming[0];
-
-    document.getElementById('next-match').innerHTML = `
-
-    <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
-
-        <div class="text-center">
-
-            <img src="${nextMatch.homeTeam?.crest || ''}"
-                 width="50"
-                 height="50"
-                 style="object-fit:contain;">
-
-            <div style="font-size:14px;font-weight:600;">
-                ${nextMatch.homeTeam?.name || ''}
-            </div>
-
-        </div>
-
-        <div style="font-size:20px;font-weight:bold;color:#ffc107;">
-            VS
-        </div>
-
-        <div class="text-center">
-
-            <img src="${nextMatch.awayTeam?.crest || ''}"
-                 width="50"
-                 height="50"
-                 style="object-fit:contain;">
-
-            <div style="font-size:14px;font-weight:600;">
-                ${nextMatch.awayTeam?.name || ''}
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="mt-2">
-    🕒 ${new Date(nextMatch.utcDate).toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit'
-    })}
-</div>
-
-
-    `;
-
-    const matchTime = new Date(nextMatch.utcDate).getTime();
-
-    setInterval(function(){
-
-        const now = new Date().getTime();
-
-        const distance = matchTime - now;
-
-        if(distance < 0){
-
-    fetch('/api/live-scores/')
-    .then(res => res.json())
-    .then(matches => {
-
-        let liveMatch = matches.find(
-            m => m.status === "IN_PLAY"
-        );
-
-        if(liveMatch){
-
-            document.getElementById('countdown').innerHTML = `
-
-            <div class="text-center">
-
-                <span class="badge bg-danger mb-2">
-                    🔴 LIVE
-                </span>
-
-                <div class="text-warning fw-bold"
-                     style="font-size:40px;">
-
-                    ${liveMatch.score?.fullTime?.home ??
-                      liveMatch.score?.halfTime?.home ?? 0}
-
-                    -
-
-                    ${liveMatch.score?.fullTime?.away ??
-                      liveMatch.score?.halfTime?.away ?? 0}
-
-                </div>
-
-                <div class="mt-2">
-
-                    ${liveMatch.homeTeam?.name}
-
-                    vs
-
-                    ${liveMatch.awayTeam?.name}
-
-                </div>
-
-            </div>
-
-            `;
-
-        } else {
-
-            document.getElementById('countdown').innerHTML =
-            'No live match currently';
-
-        }
-
-    });
-
-    return;
+if(matches.length===0){
+document.getElementById('countdown').innerHTML="No matches";
+return;
 }
 
+let live=matches.find(m=>m.status==="IN_PLAY");
+let upcoming=matches.find(m=>m.status==="TIMED"||m.status==="SCHEDULED");
+let finished=matches.find(m=>m.status==="FINISHED");
 
+if(live){
 
-     
-        const days =
-            Math.floor(distance / (1000*60*60*24));
+document.getElementById("next-match").innerHTML=`
 
-        const hours =
-            Math.floor((distance % (1000*60*60*24))
-            /(1000*60*60));
+<div class="d-flex justify-content-center align-items-center gap-3">
 
-        const minutes =
-            Math.floor((distance % (1000*60*60))
-            /(1000*60));
+<div class="text-center">
+<img src="${live.homeTeam.crest}" width="55">
+<div>${live.homeTeam.name}</div>
+</div>
 
-        const seconds =
-            Math.floor((distance % (1000*60))
-            /1000);
+<div class="text-warning fw-bold" style="font-size:40px">
+${live.score.fullTime.home ?? 0}
+-
+${live.score.fullTime.away ?? 0}
+</div>
 
-        document.getElementById('countdown').innerHTML =
-            `${days}d ${hours}h ${minutes}m ${seconds}s`;
+<div class="text-center">
+<img src="${live.awayTeam.crest}" width="55">
+<div>${live.awayTeam.name}</div>
+</div>
 
-    },1000);
+</div>
 
-})
-.catch(error => {
+`;
 
-    console.log(error);
+document.getElementById("countdown").innerHTML=`
+<span class="badge bg-danger fs-6">🔴 LIVE</span>
+`;
 
-    document.getElementById('countdown').innerHTML =
-        'Failed to load countdown';
+return;
+
+}
+
+if(upcoming){
+
+document.getElementById("next-match").innerHTML=`
+
+<div class="d-flex justify-content-center align-items-center gap-3">
+
+<div class="text-center">
+<img src="${upcoming.homeTeam.crest}" width="55">
+<div>${upcoming.homeTeam.name}</div>
+</div>
+
+<div class="fw-bold text-warning">VS</div>
+
+<div class="text-center">
+<img src="${upcoming.awayTeam.crest}" width="55">
+<div>${upcoming.awayTeam.name}</div>
+</div>
+
+</div>
+
+<div class="mt-2">
+🕒 ${new Date(upcoming.utcDate).toLocaleTimeString([],{
+hour:'2-digit',
+minute:'2-digit'
+})}
+</div>
+
+`;
+
+const matchTime=new Date(upcoming.utcDate).getTime();
+
+const timer=setInterval(()=>{
+
+const now=new Date().getTime();
+
+const distance=matchTime-now;
+
+if(distance<=0){
+
+clearInterval(timer);
+
+loadMatch();
+
+return;
+
+}
+
+const d=Math.floor(distance/(1000*60*60*24));
+const h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+const m=Math.floor((distance%(1000*60*60))/(1000*60));
+const s=Math.floor((distance%(1000*60))/1000);
+
+document.getElementById("countdown").innerHTML=
+`${d}d ${h}h ${m}m ${s}s`;
+
+},1000);
+
+return;
+
+}
+
+if(finished){
+
+document.getElementById("next-match").innerHTML=`
+
+<div class="d-flex justify-content-center align-items-center gap-3">
+
+<div class="text-center">
+<img src="${finished.homeTeam.crest}" width="55">
+<div>${finished.homeTeam.name}</div>
+</div>
+
+<div class="text-success fw-bold" style="font-size:40px">
+${finished.score.fullTime.home}
+-
+${finished.score.fullTime.away}
+</div>
+
+<div class="text-center">
+<img src="${finished.awayTeam.crest}" width="55">
+<div>${finished.awayTeam.name}</div>
+</div>
+
+</div>
+
+`;
+
+document.getElementById("countdown").innerHTML=
+`<span class="badge bg-success">FULL TIME</span>`;
+
+}
 
 });
+
+}
+
+loadMatch();
+
+setInterval(loadMatch,30000);
 
 </script>
 
