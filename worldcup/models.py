@@ -81,33 +81,7 @@ class Highlight(models.Model):
 
 
 
-class Knockout(models.Model):
-    STAGE_CHOICES = (
-        ('R16', 'Round of 16'),
-        ('QF', 'Quarter Final'),
-        ('SF', 'Semi Final'),
-        ('F', 'Final'),
-    )
 
-    stage = models.CharField(
-        max_length=10,
-        choices=STAGE_CHOICES
-    )
-
-    home_team = models.CharField(max_length=100)
-    away_team = models.CharField(max_length=100)
-
-
-    home_logo = models.ImageField( upload_to='teams/', blank=True, null=True )
-    away_logo = models.ImageField( upload_to='teams/', blank=True, null=True )
-
-    home_score = models.IntegerField(default=0)
-    away_score = models.IntegerField(default=0)
-
-    match_date = models.DateTimeField()
-
-    def __str__(self):
-        return f"{self.home_team} vs {self.away_team}"
 
 class TopScorer(models.Model):
     player_name = models.CharField(max_length=100)

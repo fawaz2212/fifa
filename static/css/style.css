@@ -342,3 +342,267 @@ body {
     border-color:#facc15 !important;
     box-shadow:0 0 5px rgba(250,204,21,.4) !important;
 }
+
+
+
+/* ==========================
+   FIFA Knockout Bracket CSS
+========================== */
+
+body{
+    background:#eef4ff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.bracket{
+    display:flex;
+    gap:70px;
+    overflow-x:auto;
+    padding:40px;
+    min-width:max-content;
+}
+
+/* Scrollbar */
+
+.bracket::-webkit-scrollbar{
+    height:10px;
+}
+
+.bracket::-webkit-scrollbar-thumb{
+    background:#1d4ed8;
+    border-radius:20px;
+}
+
+.round{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    min-width:260px;
+    position:relative;
+}
+
+.round h2{
+    text-align:center;
+    margin-bottom:30px;
+    color:#003f87;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.match{
+    width:240px;
+    background:white;
+    border-radius:12px;
+    margin:25px 0;
+    box-shadow:0 8px 18px rgba(0,0,0,.12);
+    overflow:hidden;
+    position:relative;
+    transition:.3s;
+}
+
+.match:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(0,0,0,.18);
+}
+
+.team{
+    padding:14px 18px;
+    border-bottom:1px solid #eee;
+    font-size:17px;
+    font-weight:600;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.team:last-child{
+    border-bottom:none;
+}
+
+.team:hover{
+    background:#f5f9ff;
+}
+
+.winner{
+    background:#dbeafe;
+    color:#0b3ea8;
+    font-weight:bold;
+}
+
+.winner::after{
+    content:"✔";
+    color:green;
+    font-size:18px;
+}
+
+.final{
+    justify-content:center;
+}
+
+.champion{
+    text-align:center;
+}
+
+.championship{
+    width:280px;
+    border:3px solid gold;
+}
+
+.champion-team{
+    background:linear-gradient(90deg,#0056d2,#0ea5e9);
+    color:white;
+    font-size:22px;
+}
+
+.round:not(:last-child) .match::after{
+    content:"";
+    position:absolute;
+    right:-70px;
+    top:50%;
+    width:70px;
+    height:2px;
+    background:#003f87;
+}
+
+.round:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    right:-70px;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:#003f87;
+}
+
+/* Champion Title */
+
+.text-warning{
+    color:#f6b300;
+    font-size:34px;
+}
+
+.text-primary{
+    color:#0056d2;
+}
+
+/* Animation */
+
+.match{
+    animation:fadeIn .8s ease;
+}
+
+@keyframes fadeIn{
+
+0%{
+opacity:0;
+transform:translateY(20px);
+}
+
+100%{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* Mobile */
+
+@media(max-width:992px){
+
+.bracket{
+
+gap:40px;
+
+padding:20px;
+
+}
+
+.match{
+
+width:210px;
+
+}
+
+.team{
+
+font-size:15px;
+
+padding:12px;
+
+}
+
+.round h2{
+
+font-size:20px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.bracket{
+
+overflow-x:auto;
+
+}
+
+.match{
+
+width:190px;
+
+}
+
+.team{
+
+font-size:14px;
+
+}
+
+}
+
+@media(max-width:576px){
+
+.match{
+
+width:170px;
+
+}
+
+.round{
+
+min-width:190px;
+
+}
+
+.team{
+
+padding:10px;
+
+}
+
+}
+
+/* Champion Glow */
+
+.champion-team{
+
+animation:glow 2s infinite;
+
+}
+
+@keyframes glow{
+
+0%{
+box-shadow:0 0 10px gold;
+}
+
+50%{
+box-shadow:0 0 30px gold;
+}
+
+100%{
+box-shadow:0 0 10px gold;
+}
+
+}

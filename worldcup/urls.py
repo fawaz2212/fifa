@@ -17,7 +17,6 @@ urlpatterns = [
 
     path('team/<int:id>/', views.team_detail, name='team_detail'),
     path('news/<int:id>/', views.news_detail, name='news_detail'),
-    path('knockout/', views.knockout, name='knockout'),
     path(
     'top-scorers/',
     views.top_scorers,
@@ -29,6 +28,7 @@ path('about/', views.about, name='about'),
 path('privacy/', views.privacy, name='privacy'),
 path('robots.txt', views.robots_txt),
 path('search/', views.search, name='search'),
+
 
 
   

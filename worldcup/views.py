@@ -1,17 +1,23 @@
-from urllib import request
+from datetime import datetime
+from collections import defaultdict
 
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
-from collections import defaultdict
+from django.http import JsonResponse, HttpResponse
+from django.db.models import Q
+
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
-from .models import Team, Player, Match, News, Highlight
-from .services import get_standings, get_live_matches
+from .models import (
+    Team,
+    Player,
+    Match,
+    News,
+    Highlight,
+    TopScorer,
+)
 
-from datetime import datetime
-from django.shortcuts import render
-from .models import News, Highlight
+from .services import get_standings
 from .utils import get_live_matches
 
 
@@ -150,26 +156,7 @@ def send_score_update(html_data):
     )
 
 
-from .models import Knockout
-from django.shortcuts import render
 
-def knockout(request):
-
-    round16 = Knockout.objects.filter(stage='R16')
-    quarter = Knockout.objects.filter(stage='QF')
-    semi = Knockout.objects.filter(stage='SF')
-    final = Knockout.objects.filter(stage='F')
-
-    return render(
-        request,
-        'worldcup/knockout.html',
-        {
-            'round16': round16,
-            'quarter': quarter,
-            'semi': semi,
-            'final': final,
-        }
-    )
 
 
 from .models import TopScorer
