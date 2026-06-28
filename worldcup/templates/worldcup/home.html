@@ -19,29 +19,115 @@
     </div>
 
 
-{% if match_of_day %}
-<div class="card border-warning mb-4">
-    <div class="card-header bg-warning text-dark text-center fw-bold py-2">
+<div class="card border-warning mb-4 shadow">
+
+    <div class="card-header bg-warning text-dark text-center fw-bold">
         🔥 Match of the Day
     </div>
-    <div class="card-body py-3">
-        <div class="d-flex justify-content-center align-items-center">
-            <div class="text-center mx-3">
-                <img src="{{ match_of_day.homeTeam.crest }}" width="50" height="50" style="object-fit:contain;">
-                <div class="mt-1 fw-bold">{{ match_of_day.homeTeam.name }}</div>
+
+    <div class="card-body">
+
+        <div class="row align-items-center text-center">
+
+            <!-- Home Team -->
+            <div class="col-4">
+
+                <img src="{{ match_of_day.homeTeam.crest }}"
+                     width="70"
+                     height="70"
+                     class="mb-2">
+
+                <h5>{{ match_of_day.homeTeam.name }}</h5>
+
             </div>
-            <div class="text-center mx-4">
-                <h4 class="text-warning mb-1">VS</h4>
-                <span class="badge bg-danger">{{ match_of_day.status }}</span>
+
+            <!-- Middle -->
+            <div class="col-4">
+
+                {% if match_of_day.status == "IN_PLAY" %}
+
+                    <h1 class="text-danger fw-bold">
+                        {{ match_of_day.score.fullTime.home|default:0 }}
+                        -
+                        {{ match_of_day.score.fullTime.away|default:0 }}
+                    </h1>
+
+                    <span class="badge bg-danger fs-6">
+                        🔴 LIVE
+                    </span>
+
+                {% elif match_of_day.status == "FINISHED" %}
+
+                    <h1 class="text-success fw-bold">
+                        {{ match_of_day.score.fullTime.home }}
+                        -
+                        {{ match_of_day.score.fullTime.away }}
+                    </h1>
+
+                    <span class="badge bg-success fs-6">
+                        FULL TIME
+                    </span>
+
+                {% else %}
+
+                    <h2 class="text-warning fw-bold">
+                        VS
+                    </h2>
+
+                    <div class="small text-light">
+                        🕒 {{ match_of_day.utcDate|date:"g:i A" }}
+                    </div>
+
+                {% endif %}
+
             </div>
-            <div class="text-center mx-3">
-                <img src="{{ match_of_day.awayTeam.crest }}" width="50" height="50" style="object-fit:contain;">
-                <div class="mt-1 fw-bold">{{ match_of_day.awayTeam.name }}</div>
+
+            <!-- Away Team -->
+            <div class="col-4">
+
+                <img src="{{ match_of_day.awayTeam.crest }}"
+                     width="70"
+                     height="70"
+                     class="mb-2">
+
+                <h5>{{ match_of_day.awayTeam.name }}</h5>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
-{% endif %}
+
+<script>
+function updateMatchOfDay() {
+
+    fetch("/api/live-scores/")
+    .then(res => res.json())
+    .then(matches => {
+
+        const today = matches.find(m =>
+            m.status === "IN_PLAY" ||
+            m.status === "PAUSED" ||
+            m.status === "TIMED" ||
+            m.status === "SCHEDULED"
+        );
+
+        if (!today) return;
+
+        // Update your Match of the Day HTML here
+        // or simply reload if you prefer:
+        location.reload();
+
+    });
+
+}
+
+setInterval(updateMatchOfDay,30000);
+</script>
+
+
 
 <h2 class="section-title">🎥 Highlights</h2>
 <div class="row">
