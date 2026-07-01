@@ -31,6 +31,47 @@
     <p>No players found.</p>
 {% endfor %}
 
+<h3 class="mt-4">🥇 Top Scorers</h3>
+
+{% for scorer in top_scorers %}
+<div class="card mb-3 p-3">
+
+    <div class="row align-items-center">
+
+        <div class="col-md-2 text-center">
+            {% if scorer.photo %}
+                <img src="{{ scorer.photo.url }}"
+                     width="70"
+                     height="70"
+                     style="border-radius:50%;object-fit:cover;">
+            {% endif %}
+        </div>
+
+        <div class="col-md-6">
+            <h5 class="mb-1">{{ scorer.player_name }}</h5>
+            <small>{{ scorer.country }}</small>
+        </div>
+
+        <div class="col-md-2 text-center">
+            <span class="badge bg-warning text-dark fs-6">
+                ⚽ {{ scorer.goals }}
+            </span>
+        </div>
+
+        <div class="col-md-2 text-center">
+            <span class="badge bg-primary fs-6">
+                🎯 {{ scorer.assists }}
+            </span>
+        </div>
+
+    </div>
+
+</div>
+{% empty %}
+<p>No top scorers found.</p>
+{% endfor %}
+
+
 <h3 class="mt-4">📰 News</h3>
 
 {% for item in news %}

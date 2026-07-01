@@ -195,26 +195,25 @@ def robots_txt(request):
 
 
 
-from django.db.models import Q
+from .models import Team, Player, News, TopScorer
 
 def search(request):
-    query = request.GET.get('q')
+    query = request.GET.get("q", "")
 
-    teams = Team.objects.filter(
-        Q(name__icontains=query)
-    ) if query else []
+    teams = Team.objects.filter(name__icontains=query)
 
-    players = Player.objects.filter(
-        Q(name__icontains=query)
-    ) if query else []
+    players = Player.objects.filter(name__icontains=query)
 
-    news = News.objects.filter(
-        Q(title__icontains=query)
-    ) if query else []
+    news = News.objects.filter(title__icontains=query)
 
-    return render(request, 'worldcup/search.html', {
-        'query': query,
-        'teams': teams,
-        'players': players,
-        'news': news,
+    top_scorers = TopScorer.objects.filter(
+        player_name__icontains=query
+    )
+
+    return render(request, "worldcup/search.html", {
+        "query": query,
+        "teams": teams,
+        "players": players,
+        "news": news,
+        "top_scorers": top_scorers,
     })
