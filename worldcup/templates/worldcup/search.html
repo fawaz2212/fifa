@@ -14,22 +14,55 @@
 <h3>🏆 Teams</h3>
 
 {% for team in teams %}
-    <div class="card mb-2 p-2">
-        {{ team.name }}
+<div class="card mb-3 p-3">
+    <div class="d-flex align-items-center">
+
+        {% if team.flag %}
+        <img src="{{ team.flag.url }}"
+             width="60"
+             height="60"
+             class="rounded-circle me-3"
+             style="object-fit:cover;">
+        {% endif %}
+
+        <div>
+            <h5 class="mb-1">{{ team.name }}</h5>
+            <small>Group {{ team.group }}</small>
+        </div>
+
     </div>
+</div>
 {% empty %}
-    <p>No teams found.</p>
+<p>No teams found.</p>
 {% endfor %}
 
 <h3 class="mt-4">⚽ Players</h3>
 
 {% for player in players %}
-    <div class="card mb-2 p-2">
-        {{ player.name }}
+<div class="card mb-3 p-3">
+    <div class="d-flex align-items-center">
+
+        {% if player.photo %}
+        <img src="{{ player.photo.url }}"
+             width="70"
+             height="70"
+             class="rounded-circle me-3"
+             style="object-fit:cover;">
+        {% endif %}
+
+        <div>
+            <h5 class="mb-1">{{ player.name }}</h5>
+            <small>
+                {{ player.team.name }} • {{ player.position }}
+            </small>
+        </div>
+
     </div>
+</div>
 {% empty %}
-    <p>No players found.</p>
+<p>No players found.</p>
 {% endfor %}
+
 
 <h3 class="mt-4">🥇 Top Scorers</h3>
 
